@@ -1,3 +1,60 @@
-import { useQuery } from '@tanstack/react-query'; import { router } from 'expo-router'; import { Image, Pressable, StyleSheet, Text, View } from 'react-native'; import { EmptyState, ErrorState, LoadingState, Screen } from '@/components'; import { getEvents } from '@/services/woocommerce/events'; import { colors, radius, spacing } from '@/theme';
-export default function Events(){const q=useQuery({queryKey:['events'],queryFn:({signal})=>getEvents(signal)});return <Screen title="Events">{q.isLoading?<LoadingState label="Loading TAAI events…"/>:q.isError?<ErrorState message="Events could not be loaded." retry={q.refetch}/>:!q.data?.length?<EmptyState message="No current events are available."/>:<View style={{gap:spacing.lg}}>{q.data.map(e=><Pressable key={e.id} accessibilityRole="button" accessibilityLabel={`View ${e.name}`} onPress={()=>router.push(`/events/${e.id}`)} style={s.card}>{e.thumbnail?<Image source={{uri:e.thumbnail}} style={s.image}/>:<View style={[s.image,s.placeholder]}/>}<View style={s.copy}><Text style={s.name}>{e.name}</Text><Text numberOfLines={2} style={s.desc}>{e.shortDescription||e.description}</Text><Text style={s.link}>{e.isInStock?'View event & tickets':'View event'}</Text></View></Pressable>)}</View>}</Screen>}
-const s=StyleSheet.create({card:{backgroundColor:colors.surface,borderRadius:radius.xl,overflow:'hidden',borderWidth:1,borderColor:colors.border},image:{width:'100%',height:200,backgroundColor:colors.surfaceMuted},placeholder:{backgroundColor:colors.goldSurface},copy:{padding:spacing.lg,gap:spacing.sm},name:{fontSize:18,fontWeight:'700',color:colors.primaryDark},desc:{color:colors.textSecondary,lineHeight:20},link:{color:colors.primary,fontWeight:'600'}});
+import { useQuery } from '@tanstack/react-query';
+import { router } from 'expo-router';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { EmptyState, ErrorState, LoadingState, Screen } from '@/components';
+import { getEvents } from '@/services/woocommerce/events';
+import { colors, radius, spacing } from '@/theme';
+export default function Events() {
+  const q = useQuery({ queryKey: ['events'], queryFn: ({ signal }) => getEvents(signal) });
+  return (
+    <Screen title="Events">
+      {q.isLoading ? (
+        <LoadingState label="Loading TAAI events…" />
+      ) : q.isError ? (
+        <ErrorState message="Events could not be loaded." retry={q.refetch} />
+      ) : !q.data?.length ? (
+        <EmptyState message="No current events are available." />
+      ) : (
+        <View style={{ gap: spacing.lg }}>
+          {q.data.map((e) => (
+            <Pressable
+              key={e.id}
+              accessibilityRole="button"
+              accessibilityLabel={`View ${e.name}`}
+              onPress={() => router.push(`/events/${e.id}`)}
+              style={s.card}
+            >
+              {e.thumbnail ? (
+                <Image source={{ uri: e.thumbnail }} style={s.image} />
+              ) : (
+                <View style={[s.image, s.placeholder]} />
+              )}
+              <View style={s.copy}>
+                <Text style={s.name}>{e.name}</Text>
+                <Text numberOfLines={2} style={s.desc}>
+                  {e.shortDescription || e.description}
+                </Text>
+                <Text style={s.link}>{e.isInStock ? 'View event & tickets' : 'View event'}</Text>
+              </View>
+            </Pressable>
+          ))}
+        </View>
+      )}
+    </Screen>
+  );
+}
+const s = StyleSheet.create({
+  card: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.xl,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  image: { width: '100%', height: 200, backgroundColor: colors.surfaceMuted },
+  placeholder: { backgroundColor: colors.goldSurface },
+  copy: { padding: spacing.lg, gap: spacing.sm },
+  name: { fontSize: 18, fontWeight: '700', color: colors.primaryDark },
+  desc: { color: colors.textSecondary, lineHeight: 20 },
+  link: { color: colors.primary, fontWeight: '600' },
+});

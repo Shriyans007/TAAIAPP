@@ -10,4 +10,3 @@
 - Describe in-app account deletion and why notification permission is requested.
 - Suggested release note: “Introducing TAAI APP for TAAI events, membership, gallery and community updates.”
 - Do not submit until real-device tests, policy review, final assets and store-owner approvals are complete.
-

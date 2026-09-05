@@ -25,4 +25,3 @@ Events use WooCommerce Store API category 112; membership products use category 
 Replace the placeholder EAS project ID, run `eas login`, `eas build:configure`, then `eas build --platform android --profile production` and `eas build --platform ios --profile production`. Expo Go is not required for release builds. Organisation-owned Apple and Google developer credentials are external requirements.
 
 See `docs/RELEASE.md` for production and store steps and the remaining device-validation checklist.
-

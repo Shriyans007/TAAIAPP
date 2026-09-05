@@ -3,8 +3,10 @@
   "build": {
     "development": { "developmentClient": true, "distribution": "internal" },
     "preview": { "distribution": "internal" },
-    "production": { "autoIncrement": true, "env": { "EXPO_PUBLIC_WORDPRESS_URL": "https://taai.net.au" } }
+    "production": {
+      "autoIncrement": true,
+      "env": { "EXPO_PUBLIC_WORDPRESS_URL": "https://taai.net.au" }
+    }
   },
   "submit": { "production": {} }
 }
-

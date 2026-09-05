@@ -1,2 +1,48 @@
-import { Link, router } from 'expo-router'; import { Pressable, Text, View } from 'react-native'; import { Screen, SectionTitle } from '@/components'; import { useAuth } from '@/services/auth/AuthProvider'; import { colors, spacing } from '@/theme';
-export default function Profile(){const {user,logout,loading}=useAuth();return <Screen title="Profile">{loading?<Text>Restoring session…</Text>:user?<View style={{gap:spacing.lg}}><SectionTitle>{user.displayName}</SectionTitle><Text>{user.email}</Text><Link href="/profile/edit" asChild><Pressable><Text style={{color:colors.primary}}>Edit profile</Text></Pressable></Link><Link href="/profile/notifications" asChild><Pressable><Text style={{color:colors.primary}}>Notification preferences</Text></Pressable></Link><Link href="/profile/settings" asChild><Pressable><Text style={{color:colors.primary}}>Account settings</Text></Pressable></Link><Pressable onPress={logout}><Text style={{color:colors.error}}>Log out</Text></Pressable></View>:<View style={{gap:spacing.lg}}><Text>Log in with the same account you use on the TAAI website.</Text><Pressable onPress={()=>router.push('/auth/login')} style={{backgroundColor:colors.primary,padding:16,borderRadius:12}}><Text style={{color:'white',textAlign:'center',fontWeight:'600'}}>Log In</Text></Pressable></View>}</Screen>}
+import { Link, router } from 'expo-router';
+import { Pressable, Text, View } from 'react-native';
+import { Screen, SectionTitle } from '@/components';
+import { useAuth } from '@/services/auth/AuthProvider';
+import { colors, spacing } from '@/theme';
+export default function Profile() {
+  const { user, logout, loading } = useAuth();
+  return (
+    <Screen title="Profile">
+      {loading ? (
+        <Text>Restoring session…</Text>
+      ) : user ? (
+        <View style={{ gap: spacing.lg }}>
+          <SectionTitle>{user.displayName}</SectionTitle>
+          <Text>{user.email}</Text>
+          <Link href="/profile/edit" asChild>
+            <Pressable>
+              <Text style={{ color: colors.primary }}>Edit profile</Text>
+            </Pressable>
+          </Link>
+          <Link href="/profile/notifications" asChild>
+            <Pressable>
+              <Text style={{ color: colors.primary }}>Notification preferences</Text>
+            </Pressable>
+          </Link>
+          <Link href="/profile/settings" asChild>
+            <Pressable>
+              <Text style={{ color: colors.primary }}>Account settings</Text>
+            </Pressable>
+          </Link>
+          <Pressable onPress={logout}>
+            <Text style={{ color: colors.error }}>Log out</Text>
+          </Pressable>
+        </View>
+      ) : (
+        <View style={{ gap: spacing.lg }}>
+          <Text>Log in with the same account you use on the TAAI website.</Text>
+          <Pressable
+            onPress={() => router.push('/auth/login')}
+            style={{ backgroundColor: colors.primary, padding: 16, borderRadius: 12 }}
+          >
+            <Text style={{ color: 'white', textAlign: 'center', fontWeight: '600' }}>Log In</Text>
+          </Pressable>
+        </View>
+      )}
+    </Screen>
+  );
+}

@@ -31,4 +31,3 @@ export async function clearSessionToken(): Promise<void> {
   const SecureStore = await import('expo-secure-store');
   await SecureStore.deleteItemAsync(TOKEN_KEY);
 }
-
