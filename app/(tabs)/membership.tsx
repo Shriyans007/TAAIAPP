@@ -5,25 +5,16 @@ import { Text, View } from 'react-native';
 import { Button, Card, ErrorState, LoadingState, Screen } from '@/components';
 import { useAuth } from '@/services/auth/AuthProvider';
 import { urls } from '@/services/config';
-import { requestJson } from '@/services/http';
+import { getMembership } from '@/services/mobile/membership';
 import { colors, spacing } from '@/theme';
-type Membership = {
-  status: string;
-  membershipType: string | null;
-  startDate?: string;
-  nextPayment?: string;
-  endDate?: string;
-  manageUrl?: string;
-};
 export default function Membership() {
   const { token } = useAuth();
   const q = useQuery({
     queryKey: ['membership'],
     enabled: !!token,
-    queryFn: () =>
-      requestJson<Membership>(`${urls.mobile}/membership`, {
-        headers: { Authorization: `Bearer ${token}` },
-      }),
+    staleTime: 0,
+    refetchOnMount: 'always',
+    queryFn: () => getMembership(token!),
   });
   if (!token)
     return (
@@ -37,7 +28,10 @@ export default function Membership() {
       {q.isLoading ? (
         <LoadingState />
       ) : q.isError ? (
-        <ErrorState message="Membership could not be loaded." retry={q.refetch} />
+        <ErrorState
+          message={q.error instanceof Error ? q.error.message : 'Membership could not be loaded.'}
+          retry={q.refetch}
+        />
       ) : (
         <Card>
           <View style={{ gap: spacing.md }}>
