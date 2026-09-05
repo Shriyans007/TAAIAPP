@@ -1,8 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useQuery } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Card, Screen, SectionTitle } from '@/components';
 import { useAuth } from '@/services/auth/AuthProvider';
+import { getMembership } from '@/services/mobile/membership';
 import { colors, radius, spacing } from '@/theme';
 const links = [
   ['Events', 'calendar', '/(tabs)/events'],
@@ -11,7 +13,13 @@ const links = [
   ['Profile', 'person', '/(tabs)/profile'],
 ] as const;
 export default function Home() {
-  const { user } = useAuth();
+  const { user, token } = useAuth();
+  const membership = useQuery({
+    queryKey: ['membership'],
+    enabled: !!token,
+    staleTime: 0,
+    queryFn: () => getMembership(token!),
+  });
   return (
     <Screen title={`Namaskaram${user?.firstName ? `, ${user.firstName}` : ''} 👋`}>
       <View style={s.hero}>
@@ -19,6 +27,34 @@ export default function Home() {
         <Text style={s.heroTitle}>Telugu Association of Australia</Text>
         <Text style={s.heroText}>Bringing Telugu families together in Victoria since 1992.</Text>
       </View>
+      {user && (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="View membership details"
+          onPress={() => router.push('/(tabs)/membership')}
+        >
+          <Card>
+            <View style={s.membershipRow}>
+              <View style={s.membershipIcon}>
+                <Ionicons name="card" size={22} color={colors.primary} />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={s.membershipLabel}>Membership Status</Text>
+                <Text style={s.membershipValue}>
+                  {membership.isLoading
+                    ? 'Checking membership…'
+                    : membership.isError
+                      ? 'Unable to load membership'
+                      : `${membership.data?.membershipType ?? 'No current membership'} · ${(
+                          membership.data?.status ?? 'none'
+                        ).replaceAll('-', ' ')}`}
+                </Text>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />
+            </View>
+          </Card>
+        </Pressable>
+      )}
       <SectionTitle>Quick Access</SectionTitle>
       <View style={s.grid}>
         {links.map(([label, icon, href]) => (
@@ -92,4 +128,15 @@ const s = StyleSheet.create({
   quickLabel: { color: colors.textPrimary, fontSize: 12, marginTop: 8, fontWeight: '500' },
   body: { color: colors.textSecondary, lineHeight: 22 },
   initiative: { fontWeight: '600', color: colors.primaryDark },
+  membershipRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
+  membershipIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: radius.lg,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.goldSurface,
+  },
+  membershipLabel: { color: colors.textSecondary, fontSize: 12 },
+  membershipValue: { color: colors.primaryDark, fontWeight: '600', textTransform: 'capitalize' },
 });
