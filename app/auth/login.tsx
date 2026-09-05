@@ -25,9 +25,12 @@ export default function Login() {
   const submit = handleSubmit(async (v) => {
     try {
       await login(v.identifier, v.password);
-      router.back();
+      router.replace('/(tabs)');
     } catch (e) {
-      setError('root', { message: e instanceof Error ? e.message : 'Login failed.' });
+      setError('root', {
+        message:
+          e instanceof Error ? e.message : 'Login failed. Please check your details and try again.',
+      });
     }
   });
   return (
