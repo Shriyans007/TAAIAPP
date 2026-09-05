@@ -1,0 +1,9 @@
+<?php
+defined('ABSPATH') || exit;
+final class TAAI_Mobile_Notifications {
+    public static function admin_menu(): void { add_menu_page('TAAI Mobile','TAAI Mobile','manage_options','taai-mobile',[self::class,'page'],'dashicons-smartphone'); }
+    public static function page(): void { if(!current_user_can('manage_options'))wp_die('Forbidden'); if(isset($_POST['taai_send'])){check_admin_referer('taai_send_notification');self::send(sanitize_text_field($_POST['title']??''),sanitize_textarea_field($_POST['message']??''),sanitize_key($_POST['audience']??'everyone'));echo '<div class="notice notice-success"><p>Notification request sent.</p></div>';} echo '<div class="wrap"><h1>TAAI Mobile Notifications</h1><form method="post">';wp_nonce_field('taai_send_notification');echo '<p><input required class="regular-text" name="title" placeholder="Title"></p><p><textarea required class="large-text" name="message" placeholder="Message"></textarea></p><p><select name="audience"><option value="everyone">Everyone</option><option value="members">Members only</option></select></p><button class="button button-primary" name="taai_send">Send Notification</button></form></div>'; }
+    private static function send(string $title,string $message,string $audience): void { global $wpdb;$rows=$wpdb->get_results("SELECT token,user_id FROM {$wpdb->prefix}taai_mobile_push_tokens");$messages=[];foreach($rows as $row){if($audience==='members'&&!self::is_member((int)$row->user_id))continue;$messages[]=['to'=>$row->token,'sound'=>'default','title'=>$title,'body'=>$message];}foreach(array_chunk($messages,100) as $batch){wp_remote_post('https://exp.host/--/api/v2/push/send',['headers'=>['Content-Type'=>'application/json'],'body'=>wp_json_encode($batch),'timeout'=>20]);} }
+    private static function is_member(int $id): bool { return function_exists('wcs_user_has_subscription') && wcs_user_has_subscription($id,'','active'); }
+}
+
