@@ -14,7 +14,7 @@ final class TAAI_Mobile_Directory {
             ],
             'public' => false,
             'show_ui' => true,
-            'show_in_menu' => 'taai-mobile-notifications',
+            'show_in_menu' => 'taai-mobile',
             'supports' => ['title', 'editor', 'thumbnail', 'page-attributes'],
             'menu_icon' => 'dashicons-store',
         ]);
