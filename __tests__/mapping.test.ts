@@ -1,5 +1,5 @@
 import { mapEvent } from '@/services/woocommerce/events';
-import { stripHtml } from '@/utils/html';
+import { contentBlocks, stripHtml } from '@/utils/html';
 test('sanitises WordPress HTML', () =>
   expect(stripHtml('<p>Hello &amp; welcome</p><script>bad()</script>')).toBe('Hello & welcome'));
 test('maps event without inventing missing fields or price', () => {
@@ -19,4 +19,15 @@ test('maps event without inventing missing fields or price', () => {
   expect(e.venue).toBeUndefined();
   expect(e).not.toHaveProperty('price');
   expect(e.ticketUrl).toContain('taai.net.au');
+});
+
+test('maps safe WordPress initiative content into native blocks', () => {
+  expect(
+    contentBlocks(
+      '<h2>Point Cook</h2><p>Classes are held weekly.</p><script>bad()</script><form><input /></form>',
+    ),
+  ).toEqual([
+    { type: 'heading', text: 'Point Cook' },
+    { type: 'paragraph', text: 'Classes are held weekly.' },
+  ]);
 });

@@ -1,35 +1,91 @@
 import { Ionicons } from '@expo/vector-icons';
-import * as WebBrowser from 'expo-web-browser';
+import { router } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Screen } from '@/components';
-import { urls } from '@/services/config';
 import { colors, radius, shadows, spacing } from '@/theme';
 
 const initiatives = [
-  { label: 'Aksharajyothi', icon: 'book', path: '/aksharajyothi/' },
-  { label: 'TAAI Youth', icon: 'sunny', path: '/taai-youth/' },
-  { label: 'Telugu Business', icon: 'briefcase', path: '/telugu-business-network/' },
-  { label: 'Community', icon: 'people', path: '/' },
+  {
+    label: 'Aksharajyothi',
+    summary: 'Telugu language education',
+    icon: 'book',
+    slug: 'aksharajyothi',
+  },
+  {
+    label: 'ATCCC',
+    summary: 'Telugu cultural and community centre',
+    icon: 'business',
+    slug: 'australia-telugu-cultural-community-centre-atccc',
+  },
+  {
+    label: 'Benevolence Fund',
+    summary: 'Community welfare support',
+    icon: 'heart',
+    slug: 'benevolence-fund',
+  },
+  {
+    label: 'Community Connect',
+    summary: 'Giving back to local communities',
+    icon: 'people',
+    slug: 'community-connect',
+  },
+  { label: 'Maitreya', summary: 'TAAI community initiative', icon: 'hand-left', slug: 'maitreya' },
+  {
+    label: 'TAAI Youth',
+    summary: 'Programs for young community members',
+    icon: 'sunny',
+    slug: 'taai-youth',
+  },
+  {
+    label: 'Telugu Business Network',
+    summary: 'Supporting Telugu businesses',
+    icon: 'briefcase',
+    slug: 'telugu-business-network',
+  },
+  {
+    label: 'TAAI Sports',
+    summary: 'Community sport and participation',
+    icon: 'football',
+    slug: 'taai-sports',
+  },
 ] as const;
 
 export default function Initiatives() {
   return (
     <Screen title="TAAI Initiatives">
       <Text style={s.intro}>
-        Explore TAAI programs supporting Telugu language, culture, youth and community connection.
+        Explore TAAI programs supporting Telugu language, culture, welfare, youth and community
+        connection across Victoria.
       </Text>
-      <View style={s.grid}>
-        {initiatives.map((item) => (
+      <View style={s.list}>
+        {initiatives.map((item, index) => (
           <Pressable
-            key={item.label}
-            onPress={() => WebBrowser.openBrowserAsync(`${urls.wordpress}${item.path}`)}
+            key={item.slug}
+            accessibilityRole="button"
+            accessibilityLabel={`View ${item.label}`}
+            onPress={() => router.push(`/initiatives/${item.slug}`)}
             style={s.card}
           >
-            <View style={s.icon}>
-              <Ionicons name={item.icon} size={26} color={colors.primary} />
+            <View
+              style={[
+                s.icon,
+                {
+                  backgroundColor:
+                    index % 3 === 0
+                      ? colors.infoSurface
+                      : index % 3 === 1
+                        ? colors.goldSurface
+                        : colors.greenSurface,
+                },
+              ]}
+            >
+              <Ionicons name={item.icon} size={25} color={colors.primary} />
             </View>
-            <Text style={s.label}>{item.label}</Text>
-            <Text style={s.link}>Learn more</Text>
+            <View style={s.copy}>
+              <Text style={s.label}>{item.label}</Text>
+              <Text style={s.summary}>{item.summary}</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={20} color={colors.textMuted} />
           </Pressable>
         ))}
       </View>
@@ -38,25 +94,26 @@ export default function Initiatives() {
 }
 
 const s = StyleSheet.create({
-  intro: { color: colors.textSecondary, lineHeight: 21 },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.md },
+  intro: { color: colors.textSecondary, lineHeight: 21, marginBottom: spacing.sm },
+  list: { gap: spacing.md },
   card: {
-    width: '48%',
-    minHeight: 154,
+    minHeight: 88,
     backgroundColor: colors.surface,
     borderRadius: radius.xl,
     padding: spacing.lg,
-    gap: spacing.sm,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.md,
     ...shadows.card,
   },
   icon: {
-    width: 48,
-    height: 48,
+    width: 52,
+    height: 52,
     borderRadius: radius.lg,
-    backgroundColor: colors.goldSurface,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  label: { color: colors.primaryDark, fontWeight: '800', fontSize: 15 },
-  link: { color: colors.accent, fontSize: 13 },
+  copy: { flex: 1, gap: 4 },
+  label: { color: colors.textPrimary, fontWeight: '800', fontSize: 16 },
+  summary: { color: colors.textSecondary, fontSize: 13, lineHeight: 18 },
 });
