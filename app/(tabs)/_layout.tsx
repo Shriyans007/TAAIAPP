@@ -26,9 +26,17 @@ export default function TabLayout() {
     >
       <Tabs.Screen name="index" options={{ title: 'Home', tabBarIcon: icon('home') }} />
       <Tabs.Screen name="events" options={{ title: 'Events', tabBarIcon: icon('calendar') }} />
-      <Tabs.Screen name="gallery" options={{ title: 'Gallery', tabBarIcon: icon('images') }} />
-      <Tabs.Screen name="membership" options={{ title: 'Membership', tabBarIcon: icon('card') }} />
+      <Tabs.Screen
+        name="initiatives"
+        options={{ title: 'Initiatives', tabBarIcon: icon('star-outline') }}
+      />
+      <Tabs.Screen
+        name="directory"
+        options={{ title: 'Directory', tabBarIcon: icon('search-circle-outline') }}
+      />
       <Tabs.Screen name="profile" options={{ title: 'Profile', tabBarIcon: icon('person') }} />
+      <Tabs.Screen name="gallery" options={{ href: null }} />
+      <Tabs.Screen name="membership" options={{ href: null }} />
     </Tabs>
   );
 }

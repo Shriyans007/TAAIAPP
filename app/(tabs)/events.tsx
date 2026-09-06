@@ -1,42 +1,52 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useQuery } from '@tanstack/react-query';
 import { router } from 'expo-router';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import { EmptyState, ErrorState, LoadingState, Screen } from '@/components';
+import { useMemo, useState } from 'react';
+import { StyleSheet, TextInput, View } from 'react-native';
+import { EmptyState, ErrorState, EventCard, LoadingState, Screen } from '@/components';
 import { getEvents } from '@/services/woocommerce/events';
 import { colors, radius, spacing } from '@/theme';
+
 export default function Events() {
+  const [search, setSearch] = useState('');
   const q = useQuery({ queryKey: ['events'], queryFn: ({ signal }) => getEvents(signal) });
+  const events = useMemo(() => {
+    const term = search.trim().toLowerCase();
+    return term
+      ? (q.data ?? []).filter((e) =>
+          [e.name, e.description, e.venue].join(' ').toLowerCase().includes(term),
+        )
+      : (q.data ?? []);
+  }, [q.data, search]);
   return (
     <Screen title="Events">
+      <View style={s.search}>
+        <Ionicons name="search" size={20} color={colors.textMuted} />
+        <TextInput
+          value={search}
+          onChangeText={setSearch}
+          placeholder="Search events, venues…"
+          placeholderTextColor={colors.textMuted}
+          style={s.input}
+          accessibilityLabel="Search events"
+        />
+      </View>
       {q.isLoading ? (
         <LoadingState label="Loading TAAI events…" />
       ) : q.isError ? (
         <ErrorState message="Events could not be loaded." retry={q.refetch} />
-      ) : !q.data?.length ? (
-        <EmptyState message="No current events are available." />
+      ) : !events.length ? (
+        <EmptyState
+          message={search ? 'No events match your search.' : 'No current events are available.'}
+        />
       ) : (
         <View style={{ gap: spacing.lg }}>
-          {q.data.map((e) => (
-            <Pressable
-              key={e.id}
-              accessibilityRole="button"
-              accessibilityLabel={`View ${e.name}`}
-              onPress={() => router.push(`/events/${e.id}`)}
-              style={s.card}
-            >
-              {e.thumbnail ? (
-                <Image source={{ uri: e.thumbnail }} style={s.image} />
-              ) : (
-                <View style={[s.image, s.placeholder]} />
-              )}
-              <View style={s.copy}>
-                <Text style={s.name}>{e.name}</Text>
-                <Text numberOfLines={2} style={s.desc}>
-                  {e.shortDescription || e.description}
-                </Text>
-                <Text style={s.link}>{e.isInStock ? 'View event & tickets' : 'View event'}</Text>
-              </View>
-            </Pressable>
+          {events.map((event) => (
+            <EventCard
+              key={event.id}
+              event={event}
+              onPress={() => router.push(`/events/${event.id}`)}
+            />
           ))}
         </View>
       )}
@@ -44,17 +54,16 @@ export default function Events() {
   );
 }
 const s = StyleSheet.create({
-  card: {
+  search: {
+    height: 50,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
     backgroundColor: colors.surface,
-    borderRadius: radius.xl,
-    overflow: 'hidden',
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: '#E3D5D8',
+    borderRadius: radius.lg,
+    paddingHorizontal: spacing.lg,
   },
-  image: { width: '100%', height: 200, backgroundColor: colors.surfaceMuted },
-  placeholder: { backgroundColor: colors.goldSurface },
-  copy: { padding: spacing.lg, gap: spacing.sm },
-  name: { fontSize: 18, fontWeight: '700', color: colors.primaryDark },
-  desc: { color: colors.textSecondary, lineHeight: 20 },
-  link: { color: colors.primary, fontWeight: '600' },
+  input: { flex: 1, color: colors.textPrimary },
 });

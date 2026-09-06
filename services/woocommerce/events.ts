@@ -4,7 +4,7 @@ import type { StoreProduct, TAAIEvent } from '@/types/event';
 import { stripHtml } from '@/utils/html';
 export function mapEvent(p: StoreProduct): TAAIEvent {
   const ext = (p.extensions?.taai_event ?? {}) as Partial<
-    Pick<TAAIEvent, 'date' | 'time' | 'venue'>
+    Pick<TAAIEvent, 'date' | 'time' | 'venue' | 'organiser' | 'organiserEmail'>
   >;
   return {
     id: p.id,

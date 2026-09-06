@@ -1,17 +1,22 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useQuery } from '@tanstack/react-query';
 import { router } from 'expo-router';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { Card, Screen, SectionTitle } from '@/components';
+import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { AppHeader, EmptyState, ErrorState, EventCard, LoadingState } from '@/components';
 import { useAuth } from '@/services/auth/AuthProvider';
 import { getMembership } from '@/services/mobile/membership';
-import { colors, radius, spacing } from '@/theme';
-const links = [
-  ['Events', 'calendar', '/(tabs)/events'],
-  ['Membership', 'card', '/(tabs)/membership'],
-  ['Gallery', 'images', '/(tabs)/gallery'],
-  ['Profile', 'person', '/(tabs)/profile'],
+import { getEvents } from '@/services/woocommerce/events';
+import { colors, radius, shadows, spacing } from '@/theme';
+
+const quickLinks = [
+  ['Events', 'calendar-outline', '/(tabs)/events', colors.infoSurface],
+  ['Membership', 'card-outline', '/(tabs)/membership', colors.goldSurface],
+  ['Gallery', 'images-outline', '/(tabs)/gallery', colors.lilacSurface],
+  ['Initiatives', 'star-outline', '/(tabs)/initiatives', colors.greenSurface],
+  ['Directory', 'storefront-outline', '/(tabs)/directory', colors.infoSurface],
+  ['Profile', 'person-outline', '/(tabs)/profile', colors.roseSurface],
 ] as const;
+
 export default function Home() {
   const { user, token } = useAuth();
   const membership = useQuery({
@@ -20,123 +25,211 @@ export default function Home() {
     staleTime: 0,
     queryFn: () => getMembership(token!),
   });
+  const events = useQuery({ queryKey: ['events'], queryFn: ({ signal }) => getEvents(signal) });
+  const initials = user
+    ? `${user.firstName?.[0] ?? ''}${user.lastName?.[0] ?? ''}` || user.displayName.slice(0, 2)
+    : undefined;
+  const status = membership.data?.status?.replaceAll('-', ' ') ?? 'No current membership';
   return (
-    <Screen title={`Namaskaram${user?.firstName ? `, ${user.firstName}` : ''} 👋`}>
-      <View style={s.hero}>
-        <Text style={s.telugu}>నమస్కారం</Text>
-        <Text style={s.heroTitle}>Telugu Association of Australia</Text>
-        <Text style={s.heroText}>Bringing Telugu families together in Victoria since 1992.</Text>
-      </View>
-      {user && (
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="View membership details"
-          onPress={() => router.push('/(tabs)/membership')}
-        >
-          <Card>
-            <View style={s.membershipRow}>
-              <View style={s.membershipIcon}>
-                <Ionicons name="card" size={22} color={colors.primary} />
-              </View>
-              <View style={{ flex: 1 }}>
-                <Text style={s.membershipLabel}>Membership Status</Text>
-                <Text style={s.membershipValue}>
-                  {membership.isLoading
-                    ? 'Checking membership…'
-                    : membership.isError
-                      ? 'Unable to load membership'
-                      : `${membership.data?.membershipType ?? 'No current membership'} · ${(
-                          membership.data?.status ?? 'none'
-                        ).replaceAll('-', ' ')}`}
-                </Text>
-              </View>
-              <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />
+    <SafeAreaView style={s.safe}>
+      <ScrollView contentContainerStyle={s.content}>
+        <AppHeader
+          eyebrow="నమస్కారం"
+          title={`Namaskaram${user?.firstName ? `, ${user.firstName}` : ''} 👋`}
+          subtitle={
+            user ? 'Welcome back to your TAAI community.' : 'Telugu Association of Australia Inc.'
+          }
+          initials={initials?.toUpperCase()}
+          onProfilePress={() => router.push('/(tabs)/profile')}
+        />
+        {user ? (
+          <Pressable onPress={() => router.push('/(tabs)/membership')} style={s.membership}>
+            <View style={s.memberIcon}>
+              <Ionicons name="card" size={22} color={colors.accent} />
             </View>
-          </Card>
-        </Pressable>
-      )}
-      <SectionTitle>Quick Access</SectionTitle>
-      <View style={s.grid}>
-        {links.map(([label, icon, href]) => (
-          <Pressable
-            key={label}
-            accessibilityRole="button"
-            accessibilityLabel={label}
-            onPress={() => router.push(href)}
-            style={s.quick}
-          >
-            <View style={s.icon}>
-              <Ionicons name={icon} size={24} color={colors.primary} />
+            <View style={{ flex: 1 }}>
+              <Text style={s.memberLabel}>Membership Status</Text>
+              <Text style={s.memberValue}>
+                {membership.isLoading
+                  ? 'Checking membership…'
+                  : `${membership.data?.membershipType ?? 'Membership'} · ${status}`}
+              </Text>
             </View>
-            <Text style={s.quickLabel}>{label}</Text>
+            <Ionicons name="chevron-forward" size={19} color={colors.secondary} />
           </Pressable>
-        ))}
-      </View>
-      <SectionTitle>Welcome to TAAI</SectionTitle>
-      <Card>
-        <Text style={s.body}>
-          TAAI supports Telugu language, culture, community connection and welfare across Melbourne
-          and Victoria.
-        </Text>
-      </Card>
-      <SectionTitle>TAAI Initiatives</SectionTitle>
-      <View style={{ gap: spacing.sm }}>
-        {[
-          'Aksharajyothi',
-          'TAAI Youth',
-          'Telugu Business Network',
-          'Community Connect',
-          'TAAI Sports',
-        ].map((x) => (
-          <Card key={x}>
-            <Text style={s.initiative}>{x}</Text>
-          </Card>
-        ))}
-      </View>
-    </Screen>
+        ) : null}
+        <SectionHeading title="QUICK ACCESS" />
+        <View style={s.grid}>
+          {quickLinks.map(([label, icon, href, background]) => (
+            <Pressable
+              key={label}
+              accessibilityRole="button"
+              accessibilityLabel={label}
+              onPress={() => router.push(href)}
+              style={s.quick}
+            >
+              <View style={[s.quickIcon, { backgroundColor: background }]}>
+                <Ionicons name={icon} size={24} color={colors.primary} />
+              </View>
+              <Text style={s.quickLabel}>{label}</Text>
+            </Pressable>
+          ))}
+        </View>
+        <SectionHeading
+          title="FEATURED EVENT"
+          action="View All"
+          onPress={() => router.push('/(tabs)/events')}
+        />
+        {events.isLoading ? (
+          <LoadingState label="Loading featured event…" />
+        ) : events.isError ? (
+          <ErrorState message="Featured event could not be loaded." retry={events.refetch} />
+        ) : events.data?.[0] ? (
+          <EventCard
+            event={events.data[0]}
+            onPress={() => router.push(`/events/${events.data![0].id}`)}
+          />
+        ) : (
+          <EmptyState message="No current events are available." />
+        )}
+        <SectionHeading
+          title="TAAI INITIATIVES"
+          action="See All"
+          onPress={() => router.push('/(tabs)/initiatives')}
+        />
+        <View style={s.initiatives}>
+          {[
+            ['Aksharajyothi', 'book'],
+            ['TAAI Youth', 'sunny'],
+            ['Telugu Business', 'briefcase'],
+          ].map(([label, icon]) => (
+            <Pressable
+              key={label}
+              onPress={() => router.push('/(tabs)/initiatives')}
+              style={s.initiative}
+            >
+              <View style={s.initiativeIcon}>
+                <Ionicons
+                  name={icon as keyof typeof Ionicons.glyphMap}
+                  size={23}
+                  color={colors.secondary}
+                />
+              </View>
+              <Text style={s.initiativeLabel}>{label}</Text>
+            </Pressable>
+          ))}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
+
+function SectionHeading({
+  title,
+  action,
+  onPress,
+}: {
+  title: string;
+  action?: string;
+  onPress?: () => void;
+}) {
+  return (
+    <View style={s.headingRow}>
+      <Text style={s.heading}>{title}</Text>
+      {action ? (
+        <Pressable onPress={onPress}>
+          <Text style={s.headingAction}>{action}</Text>
+        </Pressable>
+      ) : null}
+    </View>
+  );
+}
+
 const s = StyleSheet.create({
-  hero: {
-    backgroundColor: colors.primary,
-    borderRadius: radius.xxl,
-    padding: spacing.xxl,
-    overflow: 'hidden',
-  },
-  telugu: { color: colors.secondary, fontSize: 14 },
-  heroTitle: { color: colors.white, fontSize: 22, fontWeight: '700', marginTop: 4 },
-  heroText: { color: '#E2D5D8', fontSize: 13, lineHeight: 20, marginTop: 8 },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.md },
-  quick: {
-    width: '47%',
-    minHeight: 105,
-    backgroundColor: colors.surface,
+  safe: { flex: 1, backgroundColor: colors.background },
+  content: { paddingBottom: 98, gap: spacing.lg },
+  membership: {
+    marginHorizontal: spacing.xl,
+    marginTop: -58,
+    minHeight: 68,
     borderRadius: radius.xl,
-    alignItems: 'center',
-    justifyContent: 'center',
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: 'rgba(201,150,26,0.6)',
+    backgroundColor: colors.burgundySurface,
+    padding: spacing.md,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.md,
   },
-  icon: {
-    width: 48,
-    height: 48,
-    borderRadius: 14,
+  memberIcon: {
+    width: 42,
+    height: 42,
+    borderRadius: radius.lg,
     backgroundColor: colors.goldSurface,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  quickLabel: { color: colors.textPrimary, fontSize: 12, marginTop: 8, fontWeight: '500' },
-  body: { color: colors.textSecondary, lineHeight: 22 },
-  initiative: { fontWeight: '600', color: colors.primaryDark },
-  membershipRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
-  membershipIcon: {
+  memberLabel: { color: '#E6CBD1', fontSize: 11 },
+  memberValue: {
+    color: colors.secondary,
+    fontWeight: '800',
+    textTransform: 'capitalize',
+    marginTop: 2,
+  },
+  headingRow: {
+    marginHorizontal: spacing.xl,
+    marginTop: spacing.sm,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  heading: { color: colors.primaryDark, fontWeight: '800', letterSpacing: 0.8 },
+  headingAction: { color: colors.accent, fontSize: 13 },
+  grid: { paddingHorizontal: spacing.xl, flexDirection: 'row', flexWrap: 'wrap', gap: spacing.md },
+  quick: {
+    width: '30.8%',
+    minHeight: 96,
+    backgroundColor: colors.surface,
+    borderRadius: radius.xl,
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...shadows.card,
+  },
+  quickIcon: {
     width: 44,
     height: 44,
     borderRadius: radius.lg,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.goldSurface,
   },
-  membershipLabel: { color: colors.textSecondary, fontSize: 12 },
-  membershipValue: { color: colors.primaryDark, fontWeight: '600', textTransform: 'capitalize' },
+  quickLabel: {
+    marginTop: spacing.sm,
+    fontSize: 11,
+    color: colors.primaryDark,
+    textAlign: 'center',
+  },
+  initiatives: { paddingHorizontal: spacing.xl, flexDirection: 'row', gap: spacing.md },
+  initiative: {
+    flex: 1,
+    minHeight: 105,
+    borderRadius: radius.xl,
+    backgroundColor: colors.surface,
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...shadows.card,
+  },
+  initiativeIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: radius.lg,
+    backgroundColor: colors.goldSurface,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  initiativeLabel: {
+    marginTop: spacing.sm,
+    color: colors.primaryDark,
+    fontSize: 11,
+    textAlign: 'center',
+  },
 });

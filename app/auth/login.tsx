@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link, router } from 'expo-router';
+import { Link, router, useLocalSearchParams } from 'expo-router';
 import { Controller, useForm } from 'react-hook-form';
 import { KeyboardAvoidingView, Platform, Text, View } from 'react-native';
 import { z } from 'zod';
@@ -12,6 +12,7 @@ const schema = z.object({
 });
 type Values = z.infer<typeof schema>;
 export default function Login() {
+  const { returnTo } = useLocalSearchParams<{ returnTo?: string }>();
   const { login } = useAuth();
   const {
     control,
@@ -25,7 +26,7 @@ export default function Login() {
   const submit = handleSubmit(async (v) => {
     try {
       await login(v.identifier, v.password);
-      router.replace('/(tabs)');
+      router.replace(returnTo === '/(tabs)/directory' ? '/(tabs)/directory' : '/(tabs)');
     } catch (e) {
       setError('root', {
         message:

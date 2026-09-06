@@ -12,6 +12,8 @@ export interface TAAIEvent {
   date?: string;
   time?: string;
   venue?: string;
+  organiser?: string;
+  organiserEmail?: string;
 }
 export interface StoreProduct {
   id: number;
