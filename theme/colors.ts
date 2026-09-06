@@ -18,6 +18,9 @@ export const colors = {
   lilacSurface: '#F0EBF5',
   greenSurface: '#EBF5EB',
   roseSurface: '#FBF0EE',
+  burgundySurface: '#7A2939',
+  goldBorder: '#E8C96A',
+  textMuted: '#9A93A3',
   white: '#FFFFFF',
   transparent: 'transparent',
 } as const;
