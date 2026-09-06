@@ -1,3 +1,48 @@
 <?php
 defined('ABSPATH') || exit;
-final class TAAI_Mobile_REST_API { public static function register_routes(): void { $public=['login'=>['POST',[TAAI_Mobile_Auth::class,'login']],'register'=>['POST',[TAAI_Mobile_Auth::class,'register']],'forgot-password'=>['POST',[TAAI_Mobile_Auth::class,'forgot']]];foreach($public as $path=>$route)register_rest_route('taai-mobile/v1','/'.$path,['methods'=>$route[0],'callback'=>$route[1],'permission_callback'=>'__return_true']);$secure=['logout'=>['POST',[TAAI_Mobile_Auth::class,'logout']],'me'=>['GET',[TAAI_Mobile_Users::class,'me']],'profile'=>['PATCH',[TAAI_Mobile_Users::class,'update']],'membership'=>['GET',[TAAI_Mobile_Membership::class,'get']],'directory'=>['GET',[TAAI_Mobile_Directory::class,'get']],'push-token'=>['POST',[TAAI_Mobile_Push_Tokens::class,'save']],'account'=>['DELETE',[TAAI_Mobile_Account_Deletion::class,'run']]];foreach($secure as $path=>$route)register_rest_route('taai-mobile/v1','/'.$path,['methods'=>$route[0],'callback'=>$route[1],'permission_callback'=>[TAAI_Mobile_Security::class,'permission']]);register_rest_route('taai-mobile/v1','/push-token',['methods'=>'DELETE','callback'=>[TAAI_Mobile_Push_Tokens::class,'delete'],'permission_callback'=>[TAAI_Mobile_Security::class,'permission']]); } }
+
+final class TAAI_Mobile_REST_API {
+    public static function register_routes(): void {
+        $public = [
+            'login' => ['POST', [TAAI_Mobile_Auth::class, 'login']],
+            'register' => ['POST', [TAAI_Mobile_Auth::class, 'register']],
+            'forgot-password' => ['POST', [TAAI_Mobile_Auth::class, 'forgot']],
+            'events' => ['GET', [TAAI_Mobile_Events::class, 'list']],
+        ];
+        foreach ($public as $path => $route) {
+            register_rest_route('taai-mobile/v1', '/' . $path, [
+                'methods' => $route[0],
+                'callback' => $route[1],
+                'permission_callback' => '__return_true',
+            ]);
+        }
+        register_rest_route('taai-mobile/v1', '/events/(?P<id>\d+)', [
+            'methods' => 'GET',
+            'callback' => [TAAI_Mobile_Events::class, 'get'],
+            'permission_callback' => '__return_true',
+            'args' => ['id' => ['required' => true, 'validate_callback' => function ($value) { return absint($value) > 0; }]],
+        ]);
+
+        $secure = [
+            'logout' => ['POST', [TAAI_Mobile_Auth::class, 'logout']],
+            'me' => ['GET', [TAAI_Mobile_Users::class, 'me']],
+            'profile' => ['PATCH', [TAAI_Mobile_Users::class, 'update']],
+            'membership' => ['GET', [TAAI_Mobile_Membership::class, 'get']],
+            'directory' => ['GET', [TAAI_Mobile_Directory::class, 'get']],
+            'push-token' => ['POST', [TAAI_Mobile_Push_Tokens::class, 'save']],
+            'account' => ['DELETE', [TAAI_Mobile_Account_Deletion::class, 'run']],
+        ];
+        foreach ($secure as $path => $route) {
+            register_rest_route('taai-mobile/v1', '/' . $path, [
+                'methods' => $route[0],
+                'callback' => $route[1],
+                'permission_callback' => [TAAI_Mobile_Security::class, 'permission'],
+            ]);
+        }
+        register_rest_route('taai-mobile/v1', '/push-token', [
+            'methods' => 'DELETE',
+            'callback' => [TAAI_Mobile_Push_Tokens::class, 'delete'],
+            'permission_callback' => [TAAI_Mobile_Security::class, 'permission'],
+        ]);
+    }
+}

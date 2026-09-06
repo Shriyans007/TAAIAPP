@@ -2,12 +2,12 @@
 /**
  * Plugin Name: TAAI Mobile API
  * Description: Secure mobile APIs for TAAI APP.
- * Version: 1.1.0
+ * Version: 1.2.0
  * Requires PHP: 7.4
  */
 defined('ABSPATH') || exit;
 define('TAAI_MOBILE_PATH', plugin_dir_path(__FILE__));
-foreach (['security','auth','users','membership','directory','push-tokens','notifications','account-deletion','rest-api'] as $file) {
+foreach (['security','auth','users','membership','events','directory','push-tokens','notifications','account-deletion','rest-api'] as $file) {
     require_once TAAI_MOBILE_PATH . 'includes/class-' . $file . '.php';
 }
 register_activation_hook(__FILE__, ['TAAI_Mobile_Security', 'activate']);

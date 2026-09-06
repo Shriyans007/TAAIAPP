@@ -24,15 +24,11 @@ export function mapEvent(p: StoreProduct): TAAIEvent {
   };
 }
 export async function getEvents(signal?: AbortSignal) {
-  const products = await requestJson<StoreProduct[]>(
-    `${urls.store}/products?category=112&per_page=20`,
-    {},
-    signal,
-  );
+  const products = await requestJson<StoreProduct[]>(`${urls.mobile}/events`, {}, signal);
   return products.map(mapEvent);
 }
 export async function getEvent(id: string, signal?: AbortSignal) {
   return mapEvent(
-    await requestJson<StoreProduct>(`${urls.store}/products/${encodeURIComponent(id)}`, {}, signal),
+    await requestJson<StoreProduct>(`${urls.mobile}/events/${encodeURIComponent(id)}`, {}, signal),
   );
 }
