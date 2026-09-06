@@ -1,14 +1,18 @@
 import { PropsWithChildren } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { colors, spacing } from '@/theme';
 export function Screen({
   title,
   children,
   scroll = true,
+  refreshing = false,
+  onRefresh,
 }: {
   title: string;
   children: React.ReactNode;
   scroll?: boolean;
+  refreshing?: boolean;
+  onRefresh?: () => void;
 }) {
   const content = (
     <View style={s.content}>
@@ -21,7 +25,21 @@ export function Screen({
   return (
     <SafeAreaView style={s.safe}>
       {scroll ? (
-        <ScrollView contentContainerStyle={{ paddingBottom: 96 }}>{content}</ScrollView>
+        <ScrollView
+          contentContainerStyle={{ paddingBottom: 96 }}
+          refreshControl={
+            onRefresh ? (
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                tintColor={colors.primary}
+                colors={[colors.primary]}
+              />
+            ) : undefined
+          }
+        >
+          {content}
+        </ScrollView>
       ) : (
         content
       )}

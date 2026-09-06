@@ -1,7 +1,15 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useQuery } from '@tanstack/react-query';
 import { router } from 'expo-router';
-import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  Pressable,
+  RefreshControl,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { AppHeader, EmptyState, ErrorState, EventCard, LoadingState } from '@/components';
 import { useAuth } from '@/services/auth/AuthProvider';
 import { getMembership } from '@/services/mobile/membership';
@@ -25,14 +33,32 @@ export default function Home() {
     staleTime: 0,
     queryFn: () => getMembership(token!),
   });
-  const events = useQuery({ queryKey: ['events'], queryFn: ({ signal }) => getEvents(signal) });
+  const events = useQuery({
+    queryKey: ['events'],
+    queryFn: ({ signal }) => getEvents(signal),
+    staleTime: 0,
+    refetchOnMount: 'always',
+  });
   const initials = user
     ? `${user.firstName?.[0] ?? ''}${user.lastName?.[0] ?? ''}` || user.displayName.slice(0, 2)
     : undefined;
   const status = membership.data?.status?.replaceAll('-', ' ') ?? 'No current membership';
   return (
     <SafeAreaView style={s.safe}>
-      <ScrollView contentContainerStyle={s.content}>
+      <ScrollView
+        contentContainerStyle={s.content}
+        refreshControl={
+          <RefreshControl
+            refreshing={events.isRefetching || membership.isRefetching}
+            onRefresh={() => {
+              events.refetch();
+              if (token) membership.refetch();
+            }}
+            tintColor={colors.primary}
+            colors={[colors.primary]}
+          />
+        }
+      >
         <AppHeader
           eyebrow="నమస్కారం"
           title={`Namaskaram${user?.firstName ? `, ${user.firstName}` : ''} 👋`}

@@ -9,7 +9,12 @@ import { colors, radius, spacing } from '@/theme';
 
 export default function Events() {
   const [search, setSearch] = useState('');
-  const q = useQuery({ queryKey: ['events'], queryFn: ({ signal }) => getEvents(signal) });
+  const q = useQuery({
+    queryKey: ['events'],
+    queryFn: ({ signal }) => getEvents(signal),
+    staleTime: 0,
+    refetchOnMount: 'always',
+  });
   const events = useMemo(() => {
     const term = search.trim().toLowerCase();
     return term
@@ -19,7 +24,7 @@ export default function Events() {
       : (q.data ?? []);
   }, [q.data, search]);
   return (
-    <Screen title="Events">
+    <Screen title="Events" refreshing={q.isRefetching} onRefresh={() => q.refetch()}>
       <View style={s.search}>
         <Ionicons name="search" size={20} color={colors.textMuted} />
         <TextInput
