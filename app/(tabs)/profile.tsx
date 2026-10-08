@@ -11,8 +11,9 @@ import { colors, radius, spacing } from '@/theme';
 export default function Profile() {
   const { user, token, logout, loading } = useAuth();
   const membership = useQuery({
-    queryKey: ['membership'],
+    queryKey: ['membership', user?.id],
     enabled: !!token,
+    meta: { authRequired: true },
     queryFn: () => getMembership(token!),
   });
   if (loading)

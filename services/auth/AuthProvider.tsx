@@ -1,4 +1,5 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { requestJson } from '@/services/http';
 import { urls } from '@/services/config';
 import type { UserProfile } from '@/types/user';
@@ -13,6 +14,7 @@ type AuthValue = {
 };
 const AuthContext = createContext<AuthValue | null>(null);
 export function AuthProvider({ children }: PropsWithChildren) {
+  const queryClient = useQueryClient();
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -46,12 +48,19 @@ export function AuthProvider({ children }: PropsWithChildren) {
           `${urls.mobile}/login`,
           { method: 'POST', body: JSON.stringify({ identifier, password }) },
         );
+        queryClient.removeQueries({ predicate: (query) => query.meta?.authRequired === true });
         await saveSessionToken(data.token);
         setToken(data.token);
         setUser(data.user);
       },
       logout: async () => {
         if (token) {
+          try {
+            await requestJson(`${urls.mobile}/push-token`, {
+              method: 'DELETE',
+              headers: { Authorization: `Bearer ${token}` },
+            });
+          } catch {}
           try {
             await requestJson(`${urls.mobile}/logout`, {
               method: 'POST',
@@ -62,12 +71,13 @@ export function AuthProvider({ children }: PropsWithChildren) {
         await clearSessionToken();
         setToken(null);
         setUser(null);
+        queryClient.removeQueries({ predicate: (query) => query.meta?.authRequired === true });
       },
       refresh: async () => {
         if (token) await loadMe(token);
       },
     }),
-    [token, user, loading],
+    [token, user, loading, queryClient],
   );
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

@@ -28,8 +28,9 @@ const quickLinks = [
 export default function Home() {
   const { user, token } = useAuth();
   const membership = useQuery({
-    queryKey: ['membership'],
+    queryKey: ['membership', user?.id],
     enabled: !!token,
+    meta: { authRequired: true },
     staleTime: 0,
     queryFn: () => getMembership(token!),
   });

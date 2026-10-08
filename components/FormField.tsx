@@ -3,8 +3,9 @@ import { colors, radius, spacing } from '@/theme';
 export function FormField({
   label,
   error,
+  helperText,
   ...props
-}: TextInputProps & { label: string; error?: string }) {
+}: TextInputProps & { label: string; error?: string; helperText?: string }) {
   return (
     <View style={{ gap: spacing.xs }}>
       <Text style={{ fontWeight: '600', color: colors.primaryDark }}>{label}</Text>
@@ -29,6 +30,9 @@ export function FormField({
           {error}
         </Text>
       )}
+      {!error && helperText ? (
+        <Text style={{ color: colors.textSecondary, fontSize: 12 }}>{helperText}</Text>
+      ) : null}
     </View>
   );
 }

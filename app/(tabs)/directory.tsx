@@ -12,11 +12,12 @@ import { colors, radius, shadows, spacing } from '@/theme';
 import type { DirectoryBusiness } from '@/types/directory';
 
 export default function Directory() {
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const [search, setSearch] = useState('');
   const q = useQuery({
-    queryKey: ['member-directory'],
+    queryKey: ['member-directory', user?.id],
     enabled: !!token,
+    meta: { authRequired: true },
     queryFn: ({ signal }) => getMemberDirectory(token!, signal),
   });
   const businesses = useMemo(() => {

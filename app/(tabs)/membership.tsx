@@ -8,10 +8,11 @@ import { urls } from '@/services/config';
 import { getMembership } from '@/services/mobile/membership';
 import { colors, spacing } from '@/theme';
 export default function Membership() {
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const q = useQuery({
-    queryKey: ['membership'],
+    queryKey: ['membership', user?.id],
     enabled: !!token,
+    meta: { authRequired: true },
     staleTime: 0,
     refetchOnMount: 'always',
     queryFn: () => getMembership(token!),
