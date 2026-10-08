@@ -85,13 +85,6 @@ export default function InitiativeDetail() {
               </Text>
             </View>
           )}
-          <View style={s.source}>
-            <Ionicons name="sync-outline" size={18} color={colors.primary} />
-            <Text style={s.sourceText}>
-              This information is loaded from the TAAI website and updates when WordPress is
-              updated.
-            </Text>
-          </View>
           <Button
             label="View on TAAI Website"
             variant="outline"
@@ -156,13 +149,4 @@ const s = StyleSheet.create({
     ...shadows.card,
   },
   emptyText: { color: colors.textSecondary, textAlign: 'center', lineHeight: 21 },
-  source: {
-    flexDirection: 'row',
-    gap: spacing.sm,
-    padding: spacing.md,
-    borderRadius: radius.lg,
-    backgroundColor: colors.surfaceMuted,
-    marginTop: spacing.md,
-  },
-  sourceText: { color: colors.textSecondary, fontSize: 12, lineHeight: 18, flex: 1 },
 });

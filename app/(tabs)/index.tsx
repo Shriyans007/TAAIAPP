@@ -94,13 +94,13 @@ export default function Home() {
             style={s.membership}
           >
             <View style={s.memberAccent} />
-            <View style={s.memberIcon}>
-              <Ionicons name="people" size={30} color={colors.white} />
-            </View>
-            <View style={s.memberContent}>
-              <View style={s.memberTopRow}>
-                <View style={s.memberTitleCopy}>
-                  <Text style={s.memberLabel}>MEMBERSHIP STATUS</Text>
+            <View style={s.memberHeader}>
+              <View style={s.memberIcon}>
+                <Ionicons name="people" size={30} color={colors.white} />
+              </View>
+              <View style={s.memberTitleCopy}>
+                <Text style={s.memberLabel}>MEMBERSHIP STATUS</Text>
+                <View style={s.memberTopRow}>
                   <Text numberOfLines={2} style={s.memberValue}>
                     {!user
                       ? 'TAAI Membership'
@@ -108,37 +108,39 @@ export default function Home() {
                         ? 'Checking membership…'
                         : (membership.data?.membershipType ?? 'No current membership')}
                   </Text>
-                </View>
-                {!membership.isLoading ? (
-                  <View style={[s.statusBadge, !isActiveMembership && s.statusBadgeInactive]}>
-                    <View style={[s.statusDot, !isActiveMembership && s.statusDotInactive]} />
-                    <Text style={[s.statusText, !isActiveMembership && s.statusTextInactive]}>
-                      {user ? membershipStatus.replaceAll('-', ' ') : 'Log in'}
-                    </Text>
-                  </View>
-                ) : null}
-              </View>
-              <View style={s.memberDivider} />
-              <View style={s.memberBottomRow}>
-                {membership.data?.startDate ? (
-                  <View style={s.memberMeta}>
-                    <Ionicons name="calendar-outline" size={22} color={colors.primary} />
-                    <View>
-                      <Text style={s.memberMetaLabel}>Member since</Text>
-                      <Text style={s.memberMetaValue}>
-                        {formatMembershipDate(membership.data.startDate)}
+                  {!membership.isLoading ? (
+                    <View style={[s.statusBadge, !isActiveMembership && s.statusBadgeInactive]}>
+                      <View style={[s.statusDot, !isActiveMembership && s.statusDotInactive]} />
+                      <Text style={[s.statusText, !isActiveMembership && s.statusTextInactive]}>
+                        {user ? membershipStatus.replaceAll('-', ' ') : 'Log in'}
                       </Text>
                     </View>
-                  </View>
-                ) : (
-                  <View style={s.memberMetaSpacer} />
-                )}
-                <View style={s.memberBottomDivider} />
-                <View style={s.viewCard}>
-                  <Ionicons name="id-card-outline" size={24} color={colors.primary} />
-                  <Text style={s.viewCardText}>View card</Text>
-                  <Ionicons name="chevron-forward" size={20} color={colors.primary} />
+                  ) : null}
                 </View>
+              </View>
+            </View>
+            <View style={s.memberDivider} />
+            <View style={s.memberBottomRow}>
+              {membership.data?.startDate ? (
+                <View style={s.memberMeta}>
+                  <Ionicons name="calendar-outline" size={22} color={colors.primary} />
+                  <View>
+                    <Text style={s.memberMetaLabel}>Member since</Text>
+                    <Text style={s.memberMetaValue}>
+                      {formatMembershipDate(membership.data.startDate)}
+                    </Text>
+                  </View>
+                </View>
+              ) : (
+                <View style={s.memberMetaSpacer} />
+              )}
+              <View style={s.memberBottomDivider} />
+              <View style={s.viewCard}>
+                <Ionicons name="id-card-outline" size={22} color={colors.primary} />
+                <Text numberOfLines={1} style={s.viewCardText}>
+                  View card
+                </Text>
+                <Ionicons name="chevron-forward" size={19} color={colors.primary} />
               </View>
             </View>
           </Pressable>
@@ -152,9 +154,16 @@ export default function Home() {
                 onPress={() => router.push(href)}
                 style={s.quick}
               >
-                <Ionicons name={icon} size={31} color={colors.primary} />
-                <Text style={s.quickLabel}>{label}</Text>
-                <Ionicons name="chevron-forward" size={20} color={colors.textMuted} />
+                <Ionicons name={icon} size={29} color={colors.primary} />
+                <Text
+                  adjustsFontSizeToFit
+                  minimumFontScale={0.82}
+                  numberOfLines={1}
+                  style={s.quickLabel}
+                >
+                  {label}
+                </Text>
+                <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
               </Pressable>
             ))}
           </View>
@@ -245,9 +254,7 @@ const s = StyleSheet.create({
     borderColor: colors.border,
     backgroundColor: colors.surface,
     padding: spacing.lg,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.lg,
+    alignItems: 'stretch',
     overflow: 'hidden',
     ...shadows.floating,
   },
@@ -267,7 +274,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  memberContent: { flex: 1, alignSelf: 'stretch', justifyContent: 'center' },
+  memberHeader: { flexDirection: 'row', alignItems: 'center', gap: spacing.lg },
   memberTopRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   memberTitleCopy: { flex: 1, gap: 3 },
   memberLabel: { color: colors.textSecondary, fontSize: 11, fontWeight: '700' },
@@ -336,10 +343,10 @@ const s = StyleSheet.create({
     minHeight: 78,
     backgroundColor: colors.surface,
     borderRadius: radius.xl,
-    paddingHorizontal: spacing.lg,
+    paddingHorizontal: spacing.md,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.md,
+    gap: spacing.sm,
     ...shadows.card,
   },
   quickLabel: {
