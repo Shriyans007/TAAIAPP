@@ -1,3 +1,4 @@
+import { File } from 'expo-file-system';
 import { urls } from '@/services/config';
 import { ApiError } from '@/services/http';
 import type { UserProfile } from '@/types/user';
@@ -10,7 +11,8 @@ type AvatarFile = {
 
 export async function uploadAvatar(token: string, file: AvatarFile): Promise<UserProfile> {
   const body = new FormData();
-  body.append('avatar', file as unknown as Blob);
+  const uploadFile = new File(file.uri);
+  body.append('avatar', uploadFile, file.name);
 
   const response = await fetch(`${urls.mobile}/profile/avatar`, {
     method: 'POST',
