@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import { colors, radius, spacing } from '@/theme';
+import { colors, spacing } from '@/theme';
 
 export function AppHeader({
   eyebrow,
@@ -20,11 +20,6 @@ export function AppHeader({
   return (
     <View style={s.header}>
       <View style={s.orb} />
-      <View style={s.copy}>
-        {eyebrow ? <Text style={s.eyebrow}>{eyebrow}</Text> : null}
-        <Text style={s.title}>{title}</Text>
-        {subtitle ? <Text style={s.subtitle}>{subtitle}</Text> : null}
-      </View>
       {onProfilePress ? (
         <Pressable
           accessibilityRole="button"
@@ -41,46 +36,59 @@ export function AppHeader({
           )}
         </Pressable>
       ) : null}
+      <View style={s.copy}>
+        {eyebrow ? <Text style={s.eyebrow}>{eyebrow}</Text> : null}
+        <Text style={s.title}>{title}</Text>
+        {subtitle ? <Text style={s.subtitle}>{subtitle}</Text> : null}
+      </View>
     </View>
   );
 }
 
 const s = StyleSheet.create({
   header: {
-    minHeight: 164,
+    minHeight: 292,
     backgroundColor: colors.primary,
     borderBottomLeftRadius: 28,
     borderBottomRightRadius: 28,
     padding: spacing.xxl,
-    paddingTop: spacing.xl,
+    paddingTop: spacing.lg,
     // Reserve room for cards that overlap the bottom of the header. Keeping
     // this as padding lets the header grow when text wraps or fonts scale.
     paddingBottom: 84,
     overflow: 'hidden',
-    flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
   },
   orb: {
     position: 'absolute',
-    width: 150,
-    height: 150,
-    borderRadius: 75,
-    right: -42,
-    top: -36,
+    width: 148,
+    height: 148,
+    borderRadius: 74,
+    top: -4,
+    alignSelf: 'center',
     backgroundColor: 'rgba(201,150,26,0.09)',
   },
-  copy: { flex: 1, gap: 3, paddingRight: spacing.md },
-  eyebrow: { color: '#E6CBD1', fontSize: 14 },
-  title: { color: colors.white, fontSize: 23, lineHeight: 29, fontWeight: '800' },
-  subtitle: { color: '#E6CBD1', fontSize: 13, lineHeight: 19 },
+  copy: { width: '100%', alignItems: 'center', gap: 3, marginTop: spacing.sm },
+  eyebrow: { color: '#E6CBD1', fontSize: 14, textAlign: 'center' },
+  title: {
+    color: colors.white,
+    fontSize: 23,
+    lineHeight: 29,
+    fontWeight: '800',
+    textAlign: 'center',
+  },
+  subtitle: { color: '#E6CBD1', fontSize: 13, lineHeight: 19, textAlign: 'center' },
   profile: {
-    width: 44,
-    height: 44,
-    borderRadius: radius.lg,
+    width: 96,
+    height: 96,
+    borderRadius: 48,
+    borderWidth: 3,
+    borderColor: colors.secondary,
     backgroundColor: colors.secondary,
     alignItems: 'center',
     justifyContent: 'center',
+    overflow: 'hidden',
   },
-  initials: { color: colors.white, fontWeight: '800' },
-  profileImage: { width: '100%', height: '100%', borderRadius: radius.lg },
+  initials: { color: colors.white, fontSize: 26, fontWeight: '800' },
+  profileImage: { width: '100%', height: '100%', borderRadius: 48 },
 });
