@@ -5,6 +5,7 @@ export interface UserProfile {
   firstName: string;
   lastName: string;
   displayName: string;
+  avatarUrl?: string | null;
   phone?: string;
   billing?: {
     address1?: string;

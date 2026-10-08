@@ -67,6 +67,7 @@ export default function Home() {
             user ? 'Welcome back to your TAAI community.' : 'Telugu Association of Australia Inc.'
           }
           initials={initials?.toUpperCase()}
+          profileImageUrl={user?.avatarUrl}
           onProfilePress={() => router.push('/(tabs)/profile')}
         />
         {user ? (

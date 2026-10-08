@@ -19,6 +19,14 @@ const config: ExpoConfig = {
     ['expo-notifications', { color: '#6B1D2E' }],
     'expo-splash-screen',
     'expo-web-browser',
+    [
+      'expo-image-picker',
+      {
+        photosPermission: 'Allow TAAI APP to access a photo you choose for your profile.',
+        cameraPermission: 'Allow TAAI APP to take a photo for your profile.',
+        microphonePermission: false,
+      },
+    ],
   ],
   experiments: { typedRoutes: true },
   extra: {

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: TAAI Mobile API
  * Description: Secure mobile APIs for TAAI APP.
- * Version: 1.3.0
+ * Version: 1.4.0
  * Requires PHP: 7.4
  */
 defined('ABSPATH') || exit;

@@ -13,6 +13,11 @@ final class TAAI_Mobile_Account_Deletion {
         if (is_wp_error($updated)) return new WP_Error('taai_deletion_failed', 'The account could not be anonymised. Please contact TAAI.', ['status' => 500]);
         $keys = ['billing_first_name','billing_last_name','billing_company','billing_email','billing_phone','billing_address_1','billing_address_2','billing_city','billing_postcode','billing_state','billing_country','shipping_first_name','shipping_last_name','shipping_company','shipping_address_1','shipping_address_2','shipping_city','shipping_postcode','shipping_state','shipping_country'];
         foreach ($keys as $key) delete_user_meta($id, $key);
+        $avatar_id = absint(get_user_meta($id, 'taai_mobile_avatar_id', true));
+        if ($avatar_id && absint(get_post_meta($avatar_id, '_taai_mobile_profile_avatar', true)) === $id) {
+            wp_delete_attachment($avatar_id, true);
+        }
+        delete_user_meta($id, 'taai_mobile_avatar_id');
         update_user_meta($id, 'taai_mobile_deleted', 1);
         TAAI_Mobile_Security::revoke_user_sessions($id);
         $wpdb->delete("{$wpdb->prefix}taai_mobile_push_tokens", ['user_id' => $id], ['%d']);

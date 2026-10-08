@@ -29,7 +29,7 @@ describe('security contracts', () => {
     const directory = source('app/(tabs)/directory.tsx');
     const membership = source('app/(tabs)/membership.tsx');
 
-    expect(auth).toContain("query.meta?.authRequired === true");
+    expect(auth).toContain('query.meta?.authRequired === true');
     expect(directory).toContain("queryKey: ['member-directory', user?.id]");
     expect(membership).toContain("queryKey: ['membership', user?.id]");
   });
@@ -40,7 +40,28 @@ describe('security contracts', () => {
     );
 
     expect(notifications).toContain('SELECT token,user_id,preferences');
-    expect(notifications).toContain("array_key_exists($category, $preferences)");
+    expect(notifications).toContain('array_key_exists($category, $preferences)');
     expect(notifications).toContain('DeviceNotRegistered');
+  });
+
+  test('events use the WooCommerce event category slug', () => {
+    const events = source('wordpress-integration/taai-mobile-api/includes/class-events.php');
+
+    expect(events).toContain("CATEGORY_SLUG = 'taaievents'");
+    expect(events).toContain("'status' => 'publish'");
+    expect(events).toContain("'category' => [self::CATEGORY_SLUG]");
+  });
+
+  test('profile photos are authenticated, validated and kept out of the public gallery', () => {
+    const users = source('wordpress-integration/taai-mobile-api/includes/class-users.php');
+    const routes = source('wordpress-integration/taai-mobile-api/includes/class-rest-api.php');
+
+    expect(routes).toContain("'/profile/avatar'");
+    expect(routes).toContain(
+      "'permission_callback' => [TAAI_Mobile_Security::class, 'permission']",
+    );
+    expect(users).toContain('MAX_AVATAR_BYTES');
+    expect(users).toContain("['image/jpeg', 'image/png', 'image/webp']");
+    expect(users).toContain("'post_status' => 'private'");
   });
 });

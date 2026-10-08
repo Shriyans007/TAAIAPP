@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { colors, radius, spacing } from '@/theme';
 
 export function AppHeader({
@@ -7,12 +7,14 @@ export function AppHeader({
   title,
   subtitle,
   initials,
+  profileImageUrl,
   onProfilePress,
 }: {
   eyebrow?: string;
   title: string;
   subtitle?: string;
   initials?: string;
+  profileImageUrl?: string | null;
   onProfilePress?: () => void;
 }) {
   return (
@@ -30,7 +32,9 @@ export function AppHeader({
           onPress={onProfilePress}
           style={s.profile}
         >
-          {initials ? (
+          {profileImageUrl ? (
+            <Image source={{ uri: profileImageUrl }} style={s.profileImage} />
+          ) : initials ? (
             <Text style={s.initials}>{initials}</Text>
           ) : (
             <Ionicons name="person" size={20} color={colors.white} />
@@ -78,4 +82,5 @@ const s = StyleSheet.create({
     justifyContent: 'center',
   },
   initials: { color: colors.white, fontWeight: '800' },
+  profileImage: { width: '100%', height: '100%', borderRadius: radius.lg },
 });

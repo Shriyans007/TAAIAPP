@@ -41,6 +41,7 @@ export default function Profile() {
           title={user.displayName}
           subtitle={user.email}
           initials={initials.toUpperCase()}
+          profileImageUrl={user.avatarUrl}
           onProfilePress={() => router.push('/profile/edit')}
         />
         <View style={s.body}>

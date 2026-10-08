@@ -44,5 +44,10 @@ final class TAAI_Mobile_REST_API {
             'callback' => [TAAI_Mobile_Push_Tokens::class, 'delete'],
             'permission_callback' => [TAAI_Mobile_Security::class, 'permission'],
         ]);
+        register_rest_route('taai-mobile/v1', '/profile/avatar', [
+            'methods' => 'POST',
+            'callback' => [TAAI_Mobile_Users::class, 'upload_avatar'],
+            'permission_callback' => [TAAI_Mobile_Security::class, 'permission'],
+        ]);
     }
 }
