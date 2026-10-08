@@ -64,4 +64,13 @@ describe('security contracts', () => {
     expect(users).toContain("['image/jpeg', 'image/png', 'image/webp']");
     expect(users).toContain("'post_status' => 'private'");
   });
+
+  test('event galleries only expose curated published albums', () => {
+    const gallery = source('wordpress-integration/taai-mobile-api/includes/class-gallery.php');
+
+    expect(gallery).toContain("POST_TYPE = 'taai_gallery_album'");
+    expect(gallery).toContain("'post_status' => 'publish'");
+    expect(gallery).toContain("'_taai_mobile_profile_avatar'");
+    expect(gallery).toContain("'photos' => $photos");
+  });
 });

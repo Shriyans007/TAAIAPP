@@ -1,6 +1,6 @@
 import { urls } from '@/services/config';
 import { requestJson } from '@/services/http';
-import type { GalleryItem } from '@/types/media';
+import type { GalleryAlbum, GalleryItem } from '@/types/media';
 import { stripHtml } from '@/utils/html';
 type Media = {
   id: number;
@@ -27,4 +27,8 @@ export async function getGallery(page = 1, signal?: AbortSignal): Promise<Galler
       full: x.media_details?.sizes?.large?.source_url ?? x.source_url,
       mediaType: 'image',
     }));
+}
+
+export async function getGalleryAlbums(signal?: AbortSignal): Promise<GalleryAlbum[]> {
+  return requestJson<GalleryAlbum[]>(`${urls.mobile}/galleries`, {}, signal);
 }
