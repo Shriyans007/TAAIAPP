@@ -13,7 +13,13 @@ const config: ExpoConfig = {
     versionCode: 1,
     adaptiveIcon: { backgroundColor: '#6B1D2E' },
   },
-  plugins: ['expo-router', 'expo-secure-store', ['expo-notifications', { color: '#6B1D2E' }]],
+  plugins: [
+    'expo-router',
+    'expo-secure-store',
+    ['expo-notifications', { color: '#6B1D2E' }],
+    'expo-splash-screen',
+    'expo-web-browser',
+  ],
   experiments: { typedRoutes: true },
   extra: {
     wordpressUrl: process.env.EXPO_PUBLIC_WORDPRESS_URL ?? 'https://taai.net.au',
