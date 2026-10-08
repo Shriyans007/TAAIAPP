@@ -2,6 +2,9 @@ import { urls } from '@/services/config';
 import { requestJson } from '@/services/http';
 import type { StoreProduct, TAAIEvent } from '@/types/event';
 import { stripHtml } from '@/utils/html';
+
+const EVENT_CATEGORY_ID = 112;
+
 export function mapEvent(p: StoreProduct): TAAIEvent {
   const ext = (p.extensions?.taai_event ?? {}) as Partial<
     Pick<TAAIEvent, 'date' | 'time' | 'venue' | 'organiser' | 'organiserEmail'>
@@ -24,11 +27,38 @@ export function mapEvent(p: StoreProduct): TAAIEvent {
   };
 }
 export async function getEvents(signal?: AbortSignal) {
-  const products = await requestJson<StoreProduct[]>(`${urls.mobile}/events`, {}, signal);
+  const storeUrl = `${urls.store}/products?category=${EVENT_CATEGORY_ID}&per_page=100&orderby=date&order=desc`;
+  let products: StoreProduct[];
+
+  try {
+    products = await requestJson<StoreProduct[]>(storeUrl, {}, signal);
+    if (!products.length) {
+      products = await requestJson<StoreProduct[]>(`${urls.mobile}/events`, {}, signal);
+    }
+  } catch (storeError) {
+    try {
+      products = await requestJson<StoreProduct[]>(`${urls.mobile}/events`, {}, signal);
+    } catch {
+      throw storeError;
+    }
+  }
+
   return products.map(mapEvent);
 }
 export async function getEvent(id: string, signal?: AbortSignal) {
-  return mapEvent(
-    await requestJson<StoreProduct>(`${urls.mobile}/events/${encodeURIComponent(id)}`, {}, signal),
-  );
+  const eventId = encodeURIComponent(id);
+
+  try {
+    return mapEvent(
+      await requestJson<StoreProduct>(`${urls.store}/products/${eventId}`, {}, signal),
+    );
+  } catch (storeError) {
+    try {
+      return mapEvent(
+        await requestJson<StoreProduct>(`${urls.mobile}/events/${eventId}`, {}, signal),
+      );
+    } catch {
+      throw storeError;
+    }
+  }
 }
