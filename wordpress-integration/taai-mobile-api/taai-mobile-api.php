@@ -2,7 +2,7 @@
 /**
  * Plugin Name: TAAI Mobile API
  * Description: Secure mobile APIs for TAAI APP.
- * Version: 1.2.0
+ * Version: 1.3.0
  * Requires PHP: 7.4
  */
 defined('ABSPATH') || exit;
@@ -16,3 +16,6 @@ add_action('admin_menu', ['TAAI_Mobile_Notifications', 'admin_menu']);
 add_action('init', ['TAAI_Mobile_Directory', 'register_content_type']);
 add_action('add_meta_boxes', ['TAAI_Mobile_Directory', 'add_meta_boxes']);
 add_action('save_post_' . TAAI_Mobile_Directory::POST_TYPE, ['TAAI_Mobile_Directory', 'save']);
+add_action('after_password_reset', ['TAAI_Mobile_Security', 'revoke_for_password_change'], 10, 1);
+add_action('profile_update', ['TAAI_Mobile_Security', 'revoke_for_profile_password_change'], 10, 2);
+add_filter('wp_authenticate_user', ['TAAI_Mobile_Security', 'block_deleted_account'], 10, 2);
