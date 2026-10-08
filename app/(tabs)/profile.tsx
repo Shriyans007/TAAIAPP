@@ -36,7 +36,7 @@ export default function Profile() {
     `${user.firstName?.[0] ?? ''}${user.lastName?.[0] ?? ''}` || user.displayName.slice(0, 2);
   return (
     <SafeAreaView style={s.page}>
-      <ScrollView contentContainerStyle={s.scroll}>
+      <ScrollView style={s.scrollBackground} contentContainerStyle={s.scroll}>
         <AppHeader
           title={user.displayName}
           subtitle={user.email}
@@ -119,7 +119,8 @@ export default function Profile() {
 }
 
 const s = StyleSheet.create({
-  page: { flex: 1, backgroundColor: colors.background },
+  page: { flex: 1, backgroundColor: colors.primary },
+  scrollBackground: { backgroundColor: colors.background },
   scroll: { paddingBottom: 90 },
   body: { padding: spacing.xl, gap: spacing.md },
   loggedOut: { color: colors.textSecondary, lineHeight: 22 },

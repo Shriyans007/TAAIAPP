@@ -47,6 +47,7 @@ export default function Home() {
   return (
     <SafeAreaView style={s.safe}>
       <ScrollView
+        style={s.scroll}
         contentContainerStyle={s.content}
         refreshControl={
           <RefreshControl
@@ -174,7 +175,8 @@ function SectionHeading({
 }
 
 const s = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.background },
+  safe: { flex: 1, backgroundColor: colors.primary },
+  scroll: { backgroundColor: colors.background },
   content: { paddingBottom: 98, gap: spacing.lg },
   membership: {
     marginHorizontal: spacing.xl,
