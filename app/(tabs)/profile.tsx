@@ -1,8 +1,9 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useQuery } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
-import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { AppHeader, Button, MenuList, Screen, SectionTitle } from '@/components';
+import { Image, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Button, MenuList, Screen, SectionTitle } from '@/components';
 import { useAuth } from '@/services/auth/AuthProvider';
 import { urls } from '@/services/config';
 import { getMembership } from '@/services/mobile/membership';
@@ -37,13 +38,26 @@ export default function Profile() {
   return (
     <SafeAreaView style={s.page}>
       <ScrollView style={s.scrollBackground} contentContainerStyle={s.scroll}>
-        <AppHeader
-          title={user.displayName}
-          subtitle={user.email}
-          initials={initials.toUpperCase()}
-          profileImageUrl={user.avatarUrl}
-          onProfilePress={() => router.push('/profile/edit')}
-        />
+        <View style={s.profileHeader}>
+          <View style={s.orb} />
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Edit profile photo"
+            onPress={() => router.push('/profile/edit')}
+            style={s.avatarButton}
+          >
+            {user.avatarUrl ? (
+              <Image source={{ uri: user.avatarUrl }} style={s.avatarImage} />
+            ) : (
+              <Text style={s.avatarInitials}>{initials.toUpperCase()}</Text>
+            )}
+            <View style={s.cameraBadge}>
+              <Ionicons name="camera" size={15} color={colors.white} />
+            </View>
+          </Pressable>
+          <Text style={s.profileName}>{user.displayName}</Text>
+          <Text style={s.profileEmail}>{user.email}</Text>
+        </View>
         <View style={s.body}>
           <Pressable onPress={() => router.push('/(tabs)/membership')} style={s.memberCard}>
             <Text style={s.memberType}>{membership.data?.membershipType ?? 'TAAI Membership'}</Text>
@@ -122,6 +136,64 @@ const s = StyleSheet.create({
   page: { flex: 1, backgroundColor: colors.primary },
   scrollBackground: { backgroundColor: colors.background },
   scroll: { paddingBottom: 90 },
+  profileHeader: {
+    minHeight: 226,
+    paddingHorizontal: spacing.xl,
+    paddingTop: spacing.lg,
+    paddingBottom: spacing.xxl,
+    backgroundColor: colors.primary,
+    borderBottomLeftRadius: 28,
+    borderBottomRightRadius: 28,
+    alignItems: 'center',
+    overflow: 'hidden',
+  },
+  orb: {
+    position: 'absolute',
+    width: 180,
+    height: 180,
+    borderRadius: 90,
+    right: -52,
+    top: -70,
+    backgroundColor: 'rgba(201,150,26,0.09)',
+  },
+  avatarButton: {
+    width: 96,
+    height: 96,
+    borderRadius: 48,
+    borderWidth: 3,
+    borderColor: colors.secondary,
+    backgroundColor: colors.primaryDark,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatarImage: { width: '100%', height: '100%', borderRadius: 48 },
+  avatarInitials: { color: colors.white, fontSize: 28, fontWeight: '800' },
+  cameraBadge: {
+    position: 'absolute',
+    right: -2,
+    bottom: 2,
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    borderWidth: 2,
+    borderColor: colors.primary,
+    backgroundColor: colors.secondary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  profileName: {
+    marginTop: spacing.md,
+    color: colors.white,
+    fontSize: 22,
+    fontWeight: '800',
+    textAlign: 'center',
+  },
+  profileEmail: {
+    marginTop: 3,
+    color: '#E6CBD1',
+    fontSize: 13,
+    textAlign: 'center',
+  },
   body: { padding: spacing.xl, gap: spacing.md },
   loggedOut: { color: colors.textSecondary, lineHeight: 22 },
   memberCard: {
