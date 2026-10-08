@@ -56,7 +56,7 @@ export default function Home() {
               events.refetch();
               if (token) membership.refetch();
             }}
-            tintColor={colors.primary}
+            tintColor={colors.white}
             colors={[colors.primary]}
           />
         }
@@ -71,82 +71,84 @@ export default function Home() {
           profileImageUrl={user?.avatarUrl}
           onProfilePress={() => router.push('/(tabs)/profile')}
         />
-        {user ? (
-          <Pressable onPress={() => router.push('/(tabs)/membership')} style={s.membership}>
-            <View style={s.memberIcon}>
-              <Ionicons name="card" size={22} color={colors.accent} />
-            </View>
-            <View style={{ flex: 1 }}>
-              <Text style={s.memberLabel}>Membership Status</Text>
-              <Text style={s.memberValue}>
-                {membership.isLoading
-                  ? 'Checking membership…'
-                  : `${membership.data?.membershipType ?? 'Membership'} · ${status}`}
-              </Text>
-            </View>
-            <Ionicons name="chevron-forward" size={19} color={colors.secondary} />
-          </Pressable>
-        ) : null}
-        <SectionHeading title="QUICK ACCESS" />
-        <View style={s.grid}>
-          {quickLinks.map(([label, icon, href, background]) => (
-            <Pressable
-              key={label}
-              accessibilityRole="button"
-              accessibilityLabel={label}
-              onPress={() => router.push(href)}
-              style={s.quick}
-            >
-              <View style={[s.quickIcon, { backgroundColor: background }]}>
-                <Ionicons name={icon} size={24} color={colors.primary} />
+        <View style={s.mainContent}>
+          {user ? (
+            <Pressable onPress={() => router.push('/(tabs)/membership')} style={s.membership}>
+              <View style={s.memberIcon}>
+                <Ionicons name="card" size={22} color={colors.accent} />
               </View>
-              <Text style={s.quickLabel}>{label}</Text>
+              <View style={{ flex: 1 }}>
+                <Text style={s.memberLabel}>Membership Status</Text>
+                <Text style={s.memberValue}>
+                  {membership.isLoading
+                    ? 'Checking membership…'
+                    : `${membership.data?.membershipType ?? 'Membership'} · ${status}`}
+                </Text>
+              </View>
+              <Ionicons name="chevron-forward" size={19} color={colors.secondary} />
             </Pressable>
-          ))}
-        </View>
-        <SectionHeading
-          title="FEATURED EVENT"
-          action="View All"
-          onPress={() => router.push('/(tabs)/events')}
-        />
-        {events.isLoading ? (
-          <LoadingState label="Loading featured event…" />
-        ) : events.isError ? (
-          <ErrorState message="Featured event could not be loaded." retry={events.refetch} />
-        ) : events.data?.[0] ? (
-          <EventCard
-            event={events.data[0]}
-            onPress={() => router.push(`/events/${events.data![0].id}`)}
+          ) : null}
+          <SectionHeading title="QUICK ACCESS" />
+          <View style={s.grid}>
+            {quickLinks.map(([label, icon, href, background]) => (
+              <Pressable
+                key={label}
+                accessibilityRole="button"
+                accessibilityLabel={label}
+                onPress={() => router.push(href)}
+                style={s.quick}
+              >
+                <View style={[s.quickIcon, { backgroundColor: background }]}>
+                  <Ionicons name={icon} size={24} color={colors.primary} />
+                </View>
+                <Text style={s.quickLabel}>{label}</Text>
+              </Pressable>
+            ))}
+          </View>
+          <SectionHeading
+            title="FEATURED EVENT"
+            action="View All"
+            onPress={() => router.push('/(tabs)/events')}
           />
-        ) : (
-          <EmptyState message="No current events are available." />
-        )}
-        <SectionHeading
-          title="TAAI INITIATIVES"
-          action="See All"
-          onPress={() => router.push('/(tabs)/initiatives')}
-        />
-        <View style={s.initiatives}>
-          {[
-            ['Aksharajyothi', 'book'],
-            ['TAAI Youth', 'sunny'],
-            ['Telugu Business', 'briefcase'],
-          ].map(([label, icon]) => (
-            <Pressable
-              key={label}
-              onPress={() => router.push('/(tabs)/initiatives')}
-              style={s.initiative}
-            >
-              <View style={s.initiativeIcon}>
-                <Ionicons
-                  name={icon as keyof typeof Ionicons.glyphMap}
-                  size={23}
-                  color={colors.secondary}
-                />
-              </View>
-              <Text style={s.initiativeLabel}>{label}</Text>
-            </Pressable>
-          ))}
+          {events.isLoading ? (
+            <LoadingState label="Loading featured event…" />
+          ) : events.isError ? (
+            <ErrorState message="Featured event could not be loaded." retry={events.refetch} />
+          ) : events.data?.[0] ? (
+            <EventCard
+              event={events.data[0]}
+              onPress={() => router.push(`/events/${events.data![0].id}`)}
+            />
+          ) : (
+            <EmptyState message="No current events are available." />
+          )}
+          <SectionHeading
+            title="TAAI INITIATIVES"
+            action="See All"
+            onPress={() => router.push('/(tabs)/initiatives')}
+          />
+          <View style={s.initiatives}>
+            {[
+              ['Aksharajyothi', 'book'],
+              ['TAAI Youth', 'sunny'],
+              ['Telugu Business', 'briefcase'],
+            ].map(([label, icon]) => (
+              <Pressable
+                key={label}
+                onPress={() => router.push('/(tabs)/initiatives')}
+                style={s.initiative}
+              >
+                <View style={s.initiativeIcon}>
+                  <Ionicons
+                    name={icon as keyof typeof Ionicons.glyphMap}
+                    size={23}
+                    color={colors.secondary}
+                  />
+                </View>
+                <Text style={s.initiativeLabel}>{label}</Text>
+              </Pressable>
+            ))}
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -176,8 +178,9 @@ function SectionHeading({
 
 const s = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.primary },
-  scroll: { backgroundColor: colors.background },
-  content: { paddingBottom: 98, gap: spacing.lg },
+  scroll: { backgroundColor: colors.primary },
+  content: { paddingBottom: 0 },
+  mainContent: { paddingBottom: 98, gap: spacing.lg, backgroundColor: colors.background },
   membership: {
     marginHorizontal: spacing.xl,
     marginTop: -52,
