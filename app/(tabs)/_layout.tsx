@@ -13,15 +13,18 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: '#9CA3AF',
+        tabBarActiveTintColor: colors.white,
+        tabBarInactiveTintColor: 'rgba(255,255,255,0.68)',
+        tabBarActiveBackgroundColor: colors.primaryDark,
         tabBarStyle: {
           height: 68,
           paddingBottom: 8,
           paddingTop: 7,
-          borderTopColor: colors.border,
-          backgroundColor: colors.surface,
+          borderTopColor: colors.primary,
+          backgroundColor: colors.primary,
         },
+        tabBarItemStyle: { borderRadius: 12 },
+        tabBarLabelStyle: { fontWeight: '600' },
       }}
     >
       <Tabs.Screen name="index" options={{ title: 'Home', tabBarIcon: icon('home') }} />
