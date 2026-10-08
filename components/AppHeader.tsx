@@ -49,6 +49,9 @@ const s = StyleSheet.create({
     borderBottomRightRadius: 28,
     padding: spacing.xxl,
     paddingTop: spacing.xl,
+    // Reserve room for cards that overlap the bottom of the header. Keeping
+    // this as padding lets the header grow when text wraps or fonts scale.
+    paddingBottom: 84,
     overflow: 'hidden',
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -62,7 +65,7 @@ const s = StyleSheet.create({
     top: -36,
     backgroundColor: 'rgba(201,150,26,0.09)',
   },
-  copy: { flex: 1, gap: 3 },
+  copy: { flex: 1, gap: 3, paddingRight: spacing.md },
   eyebrow: { color: '#E6CBD1', fontSize: 14 },
   title: { color: colors.white, fontSize: 23, lineHeight: 29, fontWeight: '800' },
   subtitle: { color: '#E6CBD1', fontSize: 13, lineHeight: 19 },
