@@ -177,7 +177,7 @@ const s = StyleSheet.create({
   content: { paddingBottom: 98, gap: spacing.lg },
   membership: {
     marginHorizontal: spacing.xl,
-    marginTop: -58,
+    marginTop: -52,
     minHeight: 68,
     borderRadius: radius.xl,
     borderWidth: 1,
