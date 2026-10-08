@@ -58,7 +58,7 @@ export default function Initiatives() {
         connection across Victoria.
       </Text>
       <View style={s.list}>
-        {initiatives.map((item, index) => (
+        {initiatives.map((item) => (
           <Pressable
             key={item.slug}
             accessibilityRole="button"
@@ -66,19 +66,7 @@ export default function Initiatives() {
             onPress={() => router.push(`/initiatives/${item.slug}`)}
             style={s.card}
           >
-            <View
-              style={[
-                s.icon,
-                {
-                  backgroundColor:
-                    index % 3 === 0
-                      ? colors.infoSurface
-                      : index % 3 === 1
-                        ? colors.goldSurface
-                        : colors.greenSurface,
-                },
-              ]}
-            >
+            <View style={s.icon}>
               <Ionicons name={item.icon} size={25} color={colors.primary} />
             </View>
             <View style={s.copy}>
@@ -110,6 +98,7 @@ const s = StyleSheet.create({
     width: 52,
     height: 52,
     borderRadius: radius.lg,
+    backgroundColor: colors.surfaceMuted,
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -95,7 +95,7 @@ export default function EventDetail() {
         </Text>
         {mapUrl ? (
           <Pressable onPress={() => WebBrowser.openBrowserAsync(mapUrl)} style={s.map}>
-            <Ionicons name="map" size={25} color={colors.accent} />
+            <Ionicons name="map" size={25} color={colors.primary} />
             <Text style={s.mapText}>View Map</Text>
           </Pressable>
         ) : null}
@@ -194,7 +194,7 @@ const s = StyleSheet.create({
     paddingHorizontal: spacing.md,
     paddingVertical: 5,
     borderRadius: radius.pill,
-    backgroundColor: colors.accent,
+    backgroundColor: colors.primary,
   },
   badgeText: { color: colors.white, fontSize: 12, fontWeight: '800' },
   heroTitle: { color: colors.white, fontSize: 24, lineHeight: 30, fontWeight: '900' },
@@ -227,14 +227,14 @@ const s = StyleSheet.create({
     minHeight: 82,
     borderRadius: radius.xl,
     borderWidth: 1,
-    borderColor: '#B9E4F3',
-    backgroundColor: colors.infoSurface,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: spacing.md,
   },
-  mapText: { color: colors.accent, fontWeight: '700' },
+  mapText: { color: colors.primary, fontWeight: '700' },
   ticketInfo: {
     marginHorizontal: spacing.xl,
     flexDirection: 'row',

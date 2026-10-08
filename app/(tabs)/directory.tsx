@@ -236,5 +236,5 @@ const s = StyleSheet.create({
   },
   discountText: { color: colors.primaryDark, fontWeight: '700', fontSize: 13, flex: 1 },
   actions: { flexDirection: 'row', justifyContent: 'flex-end', gap: spacing.lg, marginTop: 4 },
-  action: { color: colors.accent, fontWeight: '700', fontSize: 13 },
+  action: { color: colors.primary, fontWeight: '700', fontSize: 13 },
 });

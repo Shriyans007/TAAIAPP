@@ -39,7 +39,7 @@ export function EventCard({ event, onPress }: { event: TAAIEvent; onPress: () =>
 function Meta({ icon, text }: { icon: keyof typeof Ionicons.glyphMap; text: string }) {
   return (
     <View style={s.meta}>
-      <Ionicons name={icon} size={14} color={colors.accent} />
+      <Ionicons name={icon} size={14} color={colors.primary} />
       <Text style={s.metaText}>{text}</Text>
     </View>
   );

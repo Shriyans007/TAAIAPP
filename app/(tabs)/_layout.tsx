@@ -53,13 +53,10 @@ export default function TabLayout() {
     >
       <Tabs.Screen name="index" options={{ title: 'Home', tabBarIcon: icon('home') }} />
       <Tabs.Screen name="events" options={{ title: 'Events', tabBarIcon: icon('calendar') }} />
-      <Tabs.Screen
-        name="initiatives"
-        options={{ title: 'Initiatives', tabBarIcon: icon('star-outline') }}
-      />
+      <Tabs.Screen name="initiatives" options={{ href: null }} />
       <Tabs.Screen
         name="directory"
-        options={{ title: 'Directory', tabBarIcon: icon('search-circle-outline') }}
+        options={{ title: 'Directory', tabBarIcon: icon('storefront-outline') }}
       />
       <Tabs.Screen name="profile" options={{ title: 'Profile', tabBarIcon: icon('person') }} />
       <Tabs.Screen name="gallery" options={{ href: null }} />

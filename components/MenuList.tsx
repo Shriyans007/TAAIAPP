@@ -20,11 +20,7 @@ export function MenuList({ items }: { items: MenuItem[] }) {
           onPress={item.onPress}
           style={[s.row, index < items.length - 1 && s.border]}
         >
-          <Ionicons
-            name={item.icon}
-            size={21}
-            color={index % 2 ? colors.accent : colors.secondary}
-          />
+          <Ionicons name={item.icon} size={21} color={colors.primary} />
           <Text style={s.label}>{item.label}</Text>
           {item.value ? <Text style={s.value}>{item.value}</Text> : null}
           <Ionicons name="chevron-forward" size={17} color="#D4B8BE" />
