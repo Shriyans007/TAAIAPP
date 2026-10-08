@@ -1,7 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Tabs } from 'expo-router';
-import { View } from 'react-native';
+import { Tabs, useFocusEffect, useSegments } from 'expo-router';
+import { useCallback } from 'react';
+import { StatusBar, View } from 'react-native';
 import type { ColorValue } from 'react-native';
+import { useAuth } from '@/services/auth/AuthProvider';
 import { colors } from '@/theme';
 
 const icon =
@@ -21,6 +23,18 @@ const icon =
     </View>
   );
 export default function TabLayout() {
+  const segments = useSegments();
+  const { user } = useAuth();
+  const activeTab = segments.at(-1);
+  const hasBurgundyHeader =
+    activeTab === '(tabs)' || activeTab === 'index' || (activeTab === 'profile' && !!user);
+
+  useFocusEffect(
+    useCallback(() => {
+      StatusBar.setBarStyle(hasBurgundyHeader ? 'light-content' : 'dark-content', true);
+    }, [hasBurgundyHeader]),
+  );
+
   return (
     <Tabs
       screenOptions={{
