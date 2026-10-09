@@ -4,7 +4,7 @@ Cross-platform Expo/React Native app for Telugu Association of Australia Inc. Wo
 
 ## Stack and architecture
 
-Expo 57, Expo Router, TypeScript, TanStack Query, SecureStore, Expo Notifications, React Hook Form and Zod. `app/` contains routes, `components/` shared UI, `services/` integrations, `theme/` tokens extracted from the Figma prototype, and `wordpress-integration/taai-mobile-api/` the installable WordPress plugin.
+Expo 54, Expo Router, TypeScript, TanStack Query, SecureStore, Expo Notifications, React Hook Form and Zod. `app/` contains routes, `components/` shared UI, `services/` integrations, `theme/` tokens extracted from the Figma prototype, and `wordpress-integration/taai-mobile-api/` the installable WordPress plugin.
 
 ## Local setup
 

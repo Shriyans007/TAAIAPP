@@ -9,7 +9,7 @@ final class TAAI_Mobile_Users {
         $u = get_userdata($id);
         $avatar_id = absint(get_user_meta($id, self::AVATAR_META_KEY, true));
         $avatar_url = $avatar_id ? wp_get_attachment_image_url($avatar_id, 'medium') : false;
-        return ['id'=>$id,'username'=>$u->user_login,'email'=>$u->user_email,'firstName'=>$u->first_name,'lastName'=>$u->last_name,'displayName'=>$u->display_name,'avatarUrl'=>$avatar_url ?: null,'googleLinked'=>(bool)get_user_meta($id,'taai_mobile_google_sub',true),'phone'=>get_user_meta($id,'billing_phone',true),'billing'=>['address1'=>get_user_meta($id,'billing_address_1',true),'city'=>get_user_meta($id,'billing_city',true),'postcode'=>get_user_meta($id,'billing_postcode',true),'state'=>get_user_meta($id,'billing_state',true),'country'=>get_user_meta($id,'billing_country',true)]];
+        return ['id'=>$id,'username'=>$u->user_login,'email'=>$u->user_email,'firstName'=>$u->first_name,'lastName'=>$u->last_name,'displayName'=>$u->display_name,'avatarUrl'=>$avatar_url ?: null,'phone'=>get_user_meta($id,'billing_phone',true),'billing'=>['address1'=>get_user_meta($id,'billing_address_1',true),'city'=>get_user_meta($id,'billing_city',true),'postcode'=>get_user_meta($id,'billing_postcode',true),'state'=>get_user_meta($id,'billing_state',true),'country'=>get_user_meta($id,'billing_country',true)]];
     }
     public static function me() { return self::profile(TAAI_Mobile_Security::user_id()); }
     public static function update(WP_REST_Request $r) {

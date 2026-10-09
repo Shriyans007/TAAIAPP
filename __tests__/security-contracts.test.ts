@@ -73,19 +73,4 @@ describe('security contracts', () => {
     expect(gallery).toContain("'_taai_mobile_profile_avatar'");
     expect(gallery).toContain("'photos' => $photos");
   });
-
-  test('Google auth verifies tokens server-side and maps them to WordPress users', () => {
-    const google = source('wordpress-integration/taai-mobile-api/includes/class-google-auth.php');
-    const routes = source('wordpress-integration/taai-mobile-api/includes/class-rest-api.php');
-
-    expect(routes).toContain("'google/login'");
-    expect(routes).toContain("'google/register'");
-    expect(routes).toContain("'google/link'");
-    expect(google).toContain('openssl_verify');
-    expect(google).toContain('TAAI_MOBILE_GOOGLE_CLIENT_IDS');
-    expect(google).toContain("'email_verified'");
-    expect(google).toContain("'taai_mobile_google_sub'");
-    expect(google).toContain("get_user_by('email'");
-    expect(google).toContain("'role' => 'customer'");
-  });
 });

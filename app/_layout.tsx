@@ -27,8 +27,8 @@ export default function RootLayout() {
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="events/[id]" options={{ headerShown: false }} />
           <Stack.Screen name="initiatives/[slug]" options={{ headerShown: false }} />
-          <Stack.Screen name="auth/login" options={{ headerShown: false, presentation: 'modal' }} />
-          <Stack.Screen name="auth/register" options={{ headerShown: false }} />
+          <Stack.Screen name="auth/login" options={{ title: 'Log In', presentation: 'modal' }} />
+          <Stack.Screen name="auth/register" options={{ title: 'Create Account' }} />
           <Stack.Screen name="auth/forgot-password" options={{ title: 'Reset Password' }} />
           <Stack.Screen name="profile/edit" options={{ title: 'Edit Profile' }} />
           <Stack.Screen name="profile/settings" options={{ title: 'Account Settings' }} />

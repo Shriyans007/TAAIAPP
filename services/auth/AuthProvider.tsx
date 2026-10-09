@@ -9,15 +9,6 @@ type AuthValue = {
   user: UserProfile | null;
   loading: boolean;
   login(identifier: string, password: string): Promise<void>;
-  registerAccount(details: {
-    username: string;
-    email: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-  }): Promise<void>;
-  loginWithGoogle(idToken: string, mode: 'login' | 'register'): Promise<void>;
-  linkGoogle(idToken: string): Promise<void>;
   logout(): Promise<void>;
   refresh(): Promise<void>;
 };
@@ -32,12 +23,6 @@ export function AuthProvider({ children }: PropsWithChildren) {
       headers: { Authorization: `Bearer ${t}` },
     });
     setUser(me);
-  };
-  const acceptSession = async (data: { token: string; user: UserProfile }) => {
-    queryClient.removeQueries({ predicate: (query) => query.meta?.authRequired === true });
-    await saveSessionToken(data.token);
-    setToken(data.token);
-    setUser(data.user);
   };
   useEffect(() => {
     getSessionToken()
@@ -63,29 +48,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
           `${urls.mobile}/login`,
           { method: 'POST', body: JSON.stringify({ identifier, password }) },
         );
-        await acceptSession(data);
-      },
-      registerAccount: async (details) => {
-        const data = await requestJson<{ token: string; user: UserProfile }>(
-          `${urls.mobile}/register`,
-          { method: 'POST', body: JSON.stringify(details) },
-        );
-        await acceptSession(data);
-      },
-      loginWithGoogle: async (idToken, mode) => {
-        const data = await requestJson<{ token: string; user: UserProfile }>(
-          `${urls.mobile}/google/${mode}`,
-          { method: 'POST', body: JSON.stringify({ idToken }) },
-        );
-        await acceptSession(data);
-      },
-      linkGoogle: async (idToken) => {
-        if (!token) throw new Error('Log in with your TAAI password before linking Google.');
-        const data = await requestJson<{ user: UserProfile }>(`${urls.mobile}/google/link`, {
-          method: 'POST',
-          headers: { Authorization: `Bearer ${token}` },
-          body: JSON.stringify({ idToken }),
-        });
+        queryClient.removeQueries({ predicate: (query) => query.meta?.authRequired === true });
+        await saveSessionToken(data.token);
+        setToken(data.token);
         setUser(data.user);
       },
       logout: async () => {
