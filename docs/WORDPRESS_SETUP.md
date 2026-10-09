@@ -6,6 +6,8 @@ The plugin supports the TAAI server's current PHP 7.4 runtime. Upgrading the ser
 
 No Application Password is required by the app. Production should add infrastructure-level rate limiting and database backups alongside the plugin safeguards.
 
+For Google account linking and sign-up, configure the allowed Google OAuth client IDs as described in `docs/AUTHENTICATION.md`. These are public client identifiers, not client secrets. The same Google-created customer appears in WordPress Users and WooCommerce Customers because WordPress remains the only account database.
+
 ## Event galleries
 
 The mobile app gallery is separate from the website's existing general gallery. Event albums are managed under **WordPress Dashboard → TAAI Mobile → Event Galleries**.

@@ -3,7 +3,7 @@ import type { ExpoConfig } from 'expo/config';
 const config: ExpoConfig = {
   name: 'TAAI APP',
   slug: 'taai-app',
-  scheme: 'taai',
+  scheme: ['taai', 'au.net.taai.app'],
   version: '1.0.0',
   orientation: 'portrait',
   userInterfaceStyle: 'light',
@@ -31,6 +31,9 @@ const config: ExpoConfig = {
   experiments: { typedRoutes: true },
   extra: {
     wordpressUrl: process.env.EXPO_PUBLIC_WORDPRESS_URL ?? 'https://taai.net.au',
+    googleIosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID ?? '',
+    googleAndroidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID ?? '',
+    googleWebClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID ?? '',
     eas: { projectId: process.env.EXPO_PUBLIC_EAS_PROJECT_ID },
   },
 };

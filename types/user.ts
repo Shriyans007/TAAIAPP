@@ -6,6 +6,7 @@ export interface UserProfile {
   lastName: string;
   displayName: string;
   avatarUrl?: string | null;
+  googleLinked?: boolean;
   phone?: string;
   billing?: {
     address1?: string;

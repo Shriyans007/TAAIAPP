@@ -11,7 +11,7 @@ final class TAAI_Mobile_Auth {
         if (get_user_meta($user->ID, 'taai_mobile_deleted', true)) return new WP_Error('taai_account_unavailable', 'This account is unavailable.', ['status' => 403]);
         return self::issue($user);
     }
-    private static function issue(WP_User $user) {
+    public static function issue(WP_User $user) {
         global $wpdb;
         TAAI_Mobile_Security::prepare_session_issue((int) $user->ID);
         $raw = bin2hex(random_bytes(32));

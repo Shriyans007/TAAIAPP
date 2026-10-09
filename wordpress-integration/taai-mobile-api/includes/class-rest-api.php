@@ -7,6 +7,8 @@ final class TAAI_Mobile_REST_API {
             'login' => ['POST', [TAAI_Mobile_Auth::class, 'login']],
             'register' => ['POST', [TAAI_Mobile_Auth::class, 'register']],
             'forgot-password' => ['POST', [TAAI_Mobile_Auth::class, 'forgot']],
+            'google/login' => ['POST', [TAAI_Mobile_Google_Auth::class, 'login']],
+            'google/register' => ['POST', [TAAI_Mobile_Google_Auth::class, 'register']],
             'events' => ['GET', [TAAI_Mobile_Events::class, 'list']],
             'galleries' => ['GET', [TAAI_Mobile_Gallery::class, 'albums']],
         ];
@@ -32,6 +34,7 @@ final class TAAI_Mobile_REST_API {
             'directory' => ['GET', [TAAI_Mobile_Directory::class, 'get']],
             'push-token' => ['POST', [TAAI_Mobile_Push_Tokens::class, 'save']],
             'account' => ['DELETE', [TAAI_Mobile_Account_Deletion::class, 'run']],
+            'google/link' => ['POST', [TAAI_Mobile_Google_Auth::class, 'link']],
         ];
         foreach ($secure as $path => $route) {
             register_rest_route('taai-mobile/v1', '/' . $path, [
