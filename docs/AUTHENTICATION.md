@@ -24,7 +24,9 @@ Create OAuth 2.0 client IDs in TAAI's Google Cloud project for:
 
 Copy `.env.example` to `.env` and populate the three `EXPO_PUBLIC_GOOGLE_*_CLIENT_ID` values. These IDs are client-safe and bundled into the app; never add a client secret.
 
-On WordPress, add the same comma-separated client IDs to `wp-config.php` above the “stop editing” line:
+In WordPress, open **TAAI Mobile → Google Login**, add the same iOS, Android and optional web client IDs one per line, then select **Save Google Client IDs**. This requires WordPress administrator access but not server-file access.
+
+Server administrators can instead define the IDs in `wp-config.php` above the “stop editing” line. This overrides the dashboard setting:
 
 ```php
 define('TAAI_MOBILE_GOOGLE_CLIENT_IDS', 'ios-id.apps.googleusercontent.com,android-id.apps.googleusercontent.com,web-id.apps.googleusercontent.com');

@@ -87,5 +87,8 @@ describe('security contracts', () => {
     expect(google).toContain("'taai_mobile_google_sub'");
     expect(google).toContain("get_user_by('email'");
     expect(google).toContain("'role' => 'customer'");
+    expect(google).toContain('add_submenu_page(');
+    expect(google).toContain("check_admin_referer('taai_google_settings')");
+    expect(google).toContain("update_option('taai_mobile_google_client_ids'");
   });
 });

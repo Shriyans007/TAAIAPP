@@ -6,6 +6,49 @@ final class TAAI_Mobile_Google_Auth {
     private const EMAIL_META = 'taai_mobile_google_email';
     private const CERTS_TRANSIENT = 'taai_mobile_google_certs';
 
+    public static function admin_menu(): void {
+        add_submenu_page(
+            'taai-mobile',
+            'Google Login',
+            'Google Login',
+            'manage_options',
+            'taai-mobile-google',
+            [self::class, 'settings_page']
+        );
+    }
+
+    public static function settings_page(): void {
+        if (!current_user_can('manage_options')) wp_die('Forbidden');
+        $notice = '';
+        if (isset($_POST['taai_google_save'])) {
+            check_admin_referer('taai_google_settings');
+            $raw = sanitize_textarea_field(wp_unslash($_POST['google_client_ids'] ?? ''));
+            $ids = preg_split('/[\s,]+/', $raw, -1, PREG_SPLIT_NO_EMPTY);
+            $ids = array_values(array_unique(array_filter(array_map('sanitize_text_field', $ids))));
+            $invalid = array_filter($ids, function ($id) {
+                return !preg_match('/^[A-Za-z0-9._-]+\.apps\.googleusercontent\.com$/', $id);
+            });
+            if ($invalid) {
+                $notice = '<div class="notice notice-error"><p>Enter valid Google OAuth client IDs only.</p></div>';
+            } else {
+                update_option('taai_mobile_google_client_ids', implode("\n", $ids), false);
+                $notice = '<div class="notice notice-success"><p>Google login settings saved.</p></div>';
+            }
+        }
+        $configured_by_constant = defined('TAAI_MOBILE_GOOGLE_CLIENT_IDS');
+        $saved = (string) get_option('taai_mobile_google_client_ids', '');
+        echo '<div class="wrap"><h1>TAAI Mobile Google Login</h1>' . wp_kses_post($notice);
+        echo '<p>Add the public OAuth client IDs for the TAAI iOS, Android and optional web apps. Add one ID per line. Never enter a client secret.</p>';
+        if ($configured_by_constant) {
+            echo '<div class="notice notice-info"><p>Google client IDs are currently controlled by <code>TAAI_MOBILE_GOOGLE_CLIENT_IDS</code> in wp-config.php.</p></div>';
+        }
+        echo '<form method="post">';
+        wp_nonce_field('taai_google_settings');
+        echo '<textarea class="large-text code" rows="7" name="google_client_ids" ' . disabled($configured_by_constant, true, false) . '>' . esc_textarea($saved) . '</textarea>';
+        echo '<p><button class="button button-primary" name="taai_google_save" ' . disabled($configured_by_constant, true, false) . '>Save Google Client IDs</button></p>';
+        echo '</form></div>';
+    }
+
     public static function login(WP_REST_Request $request) {
         if (!TAAI_Mobile_Security::rate_limit('google-login', 20)) {
             return new WP_Error('taai_rate_limited', 'Please wait before trying again.', ['status' => 429]);
