@@ -13,7 +13,6 @@ foreach (['security','auth','google-auth','users','membership','events','gallery
 register_activation_hook(__FILE__, ['TAAI_Mobile_Security', 'activate']);
 add_action('rest_api_init', ['TAAI_Mobile_REST_API', 'register_routes']);
 add_action('admin_menu', ['TAAI_Mobile_Notifications', 'admin_menu']);
-add_action('admin_menu', ['TAAI_Mobile_Google_Auth', 'admin_menu']);
 add_action('init', ['TAAI_Mobile_Directory', 'register_content_type']);
 add_action('init', ['TAAI_Mobile_Gallery', 'register_content_type']);
 add_action('add_meta_boxes', ['TAAI_Mobile_Directory', 'add_meta_boxes']);
