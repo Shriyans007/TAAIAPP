@@ -50,8 +50,7 @@ export default function TabLayout() {
   const segments = useSegments();
   const { user } = useAuth();
   const activeTab = segments.at(-1);
-  const hasBurgundyHeader =
-    activeTab === '(tabs)' || activeTab === 'index' || (activeTab === 'profile' && !!user);
+  const hasBurgundyHeader = activeTab === '(tabs)' || (activeTab === 'profile' && !!user);
 
   useFocusEffect(
     useCallback(() => {
