@@ -31,7 +31,9 @@ const config: ExpoConfig = {
   experiments: { typedRoutes: true },
   extra: {
     wordpressUrl: process.env.EXPO_PUBLIC_WORDPRESS_URL ?? 'https://taai.net.au',
-    eas: { projectId: process.env.EXPO_PUBLIC_EAS_PROJECT_ID },
+    eas: {
+      projectId: process.env.EXPO_PUBLIC_EAS_PROJECT_ID ?? 'e08ce740-d538-44e2-be2c-5ebad3848e44',
+    },
   },
 };
 
