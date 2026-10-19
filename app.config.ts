@@ -3,11 +3,17 @@ import type { ExpoConfig } from 'expo/config';
 const config: ExpoConfig = {
   name: 'TAAI APP',
   slug: 'taai-app',
+  icon: './assets/branding/taai-round-logo.png',
   scheme: 'taai',
   version: '1.0.0',
   orientation: 'portrait',
   userInterfaceStyle: 'light',
-  ios: { bundleIdentifier: 'au.net.taai.app', supportsTablet: true, buildNumber: '1' },
+  ios: {
+    bundleIdentifier: 'au.net.taai.app',
+    supportsTablet: true,
+    buildNumber: '1',
+    config: { usesNonExemptEncryption: false },
+  },
   android: {
     package: 'au.net.taai.app',
     versionCode: 1,
