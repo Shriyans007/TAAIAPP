@@ -19,7 +19,7 @@ const icon =
         backgroundColor: focused ? 'rgba(255,255,255,0.16)' : colors.transparent,
       }}
     >
-      <Ionicons name={name} color={color} size={size} />
+      <Ionicons name={name} color={typeof color === 'string' ? color : colors.white} size={size} />
     </View>
   );
 

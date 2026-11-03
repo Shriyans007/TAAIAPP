@@ -4,11 +4,11 @@ Cross-platform Expo/React Native app for Telugu Association of Australia Inc. Wo
 
 ## Stack and architecture
 
-Expo 54, Expo Router, TypeScript, TanStack Query, SecureStore, Expo Notifications, React Hook Form and Zod. `app/` contains routes, `components/` shared UI, `services/` integrations, `theme/` tokens extracted from the Figma prototype, and `wordpress-integration/taai-mobile-api/` the installable WordPress plugin.
+Expo 58, Expo Router, TypeScript, TanStack Query, SecureStore, Expo Notifications, React Hook Form and Zod. `app/` contains routes, `components/` shared UI, `services/` integrations, `theme/` tokens extracted from the Figma prototype, and `wordpress-integration/taai-mobile-api/` the installable WordPress plugin.
 
 ## Local setup
 
-Use Node 20 LTS. Copy `.env.example` to `.env`, fill only public configuration, then run `npm install` and `npm start`. Use `npm run android`, or `npm run ios` on macOS with Xcode. Run `npm run typecheck` before commits.
+Use Node 22.13 or newer (or Node 24.3 or newer). Copy `.env.example` to `.env`, fill only public configuration, then run `npm install` and `npm start`. Use `npm run android`, or `npm run ios` on macOS with Xcode. Run `npm run typecheck` before commits.
 
 Never put WordPress passwords, WooCommerce keys, Application Passwords or tokens in Expo variables. `EXPO_PUBLIC_*` values are bundled into the app.
 

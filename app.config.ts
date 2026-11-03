@@ -24,6 +24,8 @@ const config: ExpoConfig = {
   },
   plugins: [
     'expo-router',
+    'expo-font',
+    'expo-status-bar',
     'expo-secure-store',
     ['expo-notifications', { color: '#6B1D2E' }],
     [
