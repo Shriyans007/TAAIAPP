@@ -10,7 +10,7 @@ export default function Index() {
       <View style={s.screen}>
         <Image
           accessibilityLabel="TAAI logo"
-          source={require('@/assets/branding/taai-burgundy-icon.png')}
+          source={require('@/assets/branding/taai-splash-logo.png')}
           style={s.logo}
         />
       </View>

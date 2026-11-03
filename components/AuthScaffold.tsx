@@ -47,7 +47,7 @@ export function AuthScaffold({
             ) : null}
             <Image
               accessibilityLabel="TAAI logo"
-              source={require('../assets/branding/taai-round-logo.png')}
+              source={require('../assets/branding/taai-splash-logo.png')}
               style={s.logo}
             />
             <Text accessibilityRole="header" style={s.title}>

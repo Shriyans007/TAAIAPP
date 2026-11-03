@@ -18,7 +18,7 @@ const config: ExpoConfig = {
     package: 'au.net.taai.app',
     versionCode: 1,
     adaptiveIcon: {
-      foregroundImage: './assets/branding/taai-burgundy-icon.png',
+      foregroundImage: './assets/branding/taai-splash-logo.png',
       backgroundColor: '#6B1D2E',
     },
   },
@@ -31,7 +31,7 @@ const config: ExpoConfig = {
     [
       'expo-splash-screen',
       {
-        image: './assets/branding/taai-burgundy-icon.png',
+        image: './assets/branding/taai-splash-logo.png',
         imageWidth: 260,
         resizeMode: 'contain',
         backgroundColor: '#6B1D2E',
