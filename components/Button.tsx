@@ -10,7 +10,7 @@ export function Button({
   label: string;
   onPress(): void;
   loading?: boolean;
-  variant?: 'primary' | 'outline' | 'danger';
+  variant?: 'primary' | 'outline' | 'danger' | 'gold' | 'ghost';
   disabled?: boolean;
 }) {
   const bg =
@@ -18,7 +18,9 @@ export function Button({
       ? colors.primary
       : variant === 'danger'
         ? colors.error
-        : colors.transparent;
+        : variant === 'gold'
+          ? colors.secondary
+          : colors.transparent;
   const fg = variant === 'outline' ? colors.primary : colors.white;
   return (
     <Pressable

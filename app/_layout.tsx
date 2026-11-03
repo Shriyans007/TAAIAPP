@@ -24,10 +24,26 @@ export default function RootLayout() {
             contentStyle: { backgroundColor: colors.background },
           }}
         >
+          <Stack.Screen
+            name="index"
+            options={{
+              headerShown: false,
+              animation: 'none',
+              contentStyle: { backgroundColor: colors.primary },
+            }}
+          />
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="events/[id]" options={{ headerShown: false }} />
           <Stack.Screen name="initiatives/[slug]" options={{ headerShown: false }} />
-          <Stack.Screen name="auth/login" options={{ headerShown: false, presentation: 'modal' }} />
+          <Stack.Screen
+            name="auth/login"
+            options={{
+              headerShown: false,
+              presentation: 'card',
+              animation: 'fade',
+              contentStyle: { backgroundColor: colors.primary },
+            }}
+          />
           <Stack.Screen name="auth/register" options={{ headerShown: false }} />
           <Stack.Screen name="auth/forgot-password" options={{ title: 'Reset Password' }} />
           <Stack.Screen name="profile/edit" options={{ title: 'Edit Profile' }} />

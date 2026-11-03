@@ -1,9 +1,10 @@
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useEffect, useRef } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import {
   Image,
+  Animated,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -20,7 +21,25 @@ export function AuthScaffold({
   subtitle,
   children,
   canGoBack = true,
-}: PropsWithChildren<{ title: string; subtitle: string; canGoBack?: boolean }>) {
+  tone = 'default',
+}: PropsWithChildren<{
+  title: string;
+  subtitle: string;
+  canGoBack?: boolean;
+  tone?: 'default' | 'burgundy';
+}>) {
+  const reveal = useRef(new Animated.Value(tone === 'burgundy' ? 0 : 1)).current;
+  useEffect(() => {
+    if (tone !== 'burgundy') return;
+    const animation = Animated.timing(reveal, {
+      toValue: 1,
+      duration: 440,
+      useNativeDriver: true,
+    });
+    animation.start();
+    return () => animation.stop();
+  }, [reveal, tone]);
+
   return (
     <SafeAreaView style={s.safe} edges={['top', 'left', 'right']}>
       <StatusBar style="light" />
@@ -33,29 +52,41 @@ export function AuthScaffold({
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={s.scrollContent}
         >
-          <View style={s.hero}>
-            {canGoBack ? (
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="Go back"
-                hitSlop={12}
-                onPress={() => router.back()}
-                style={s.back}
-              >
-                <Ionicons name="chevron-back" color={colors.white} size={24} />
-              </Pressable>
-            ) : null}
-            <Image
-              accessibilityLabel="TAAI logo"
-              source={require('../assets/branding/taai-splash-logo.png')}
-              style={s.logo}
-            />
-            <Text accessibilityRole="header" style={s.title}>
-              {title}
-            </Text>
-            <Text style={s.subtitle}>{subtitle}</Text>
-          </View>
-          <View style={s.card}>{children}</View>
+          <Animated.View
+            style={[
+              s.content,
+              tone === 'burgundy' && {
+                opacity: reveal,
+                transform: [
+                  { translateY: reveal.interpolate({ inputRange: [0, 1], outputRange: [18, 0] }) },
+                ],
+              },
+            ]}
+          >
+            <View style={[s.hero, tone === 'burgundy' && s.heroBurgundy]}>
+              {canGoBack ? (
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel="Go back"
+                  hitSlop={12}
+                  onPress={() => router.back()}
+                  style={s.back}
+                >
+                  <Ionicons name="chevron-back" color={colors.white} size={24} />
+                </Pressable>
+              ) : null}
+              <Image
+                accessibilityLabel="TAAI logo"
+                source={require('../assets/branding/taai-splash-logo.png')}
+                style={s.logo}
+              />
+              <Text accessibilityRole="header" style={s.title}>
+                {title}
+              </Text>
+              <Text style={s.subtitle}>{subtitle}</Text>
+            </View>
+            <View style={[s.card, tone === 'burgundy' && s.cardBurgundy]}>{children}</View>
+          </Animated.View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -66,12 +97,14 @@ const s = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.primary },
   keyboard: { flex: 1 },
   scrollContent: { flexGrow: 1, paddingBottom: spacing.xxl },
+  content: { flexGrow: 1 },
   hero: {
     alignItems: 'center',
     paddingHorizontal: spacing.xl,
     paddingTop: spacing.lg,
     paddingBottom: spacing.xl,
   },
+  heroBurgundy: { paddingTop: spacing.xxl, paddingBottom: spacing.xxl },
   back: {
     position: 'absolute',
     top: spacing.md,
@@ -107,5 +140,14 @@ const s = StyleSheet.create({
     backgroundColor: colors.background,
     gap: spacing.md,
     ...shadows.floating,
+  },
+  cardBurgundy: {
+    flexGrow: 0,
+    backgroundColor: colors.primaryDark,
+    marginHorizontal: spacing.xl,
+    borderRadius: 26,
+    padding: spacing.xl,
+    shadowOpacity: 0,
+    elevation: 0,
   },
 });

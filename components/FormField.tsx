@@ -4,11 +4,19 @@ export function FormField({
   label,
   error,
   helperText,
+  tone = 'default',
   ...props
-}: TextInputProps & { label: string; error?: string; helperText?: string }) {
+}: TextInputProps & {
+  label: string;
+  error?: string;
+  helperText?: string;
+  tone?: 'default' | 'dark';
+}) {
   return (
     <View style={{ gap: spacing.xs }}>
-      <Text style={{ fontWeight: '600', color: colors.primaryDark }}>{label}</Text>
+      <Text style={{ fontWeight: '600', color: tone === 'dark' ? '#E6CBD1' : colors.primaryDark }}>
+        {label}
+      </Text>
       <TextInput
         accessibilityLabel={label}
         {...props}
@@ -31,7 +39,9 @@ export function FormField({
         </Text>
       )}
       {!error && helperText ? (
-        <Text style={{ color: colors.textSecondary, fontSize: 12 }}>{helperText}</Text>
+        <Text style={{ color: tone === 'dark' ? '#E6CBD1' : colors.textSecondary, fontSize: 12 }}>
+          {helperText}
+        </Text>
       ) : null}
     </View>
   );

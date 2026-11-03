@@ -46,6 +46,7 @@ export default function Login() {
       title="Welcome back"
       subtitle="Use the same username/email and password as the TAAI website."
       canGoBack={initial !== '1'}
+      tone="burgundy"
     >
       <Controller
         control={control}
@@ -53,6 +54,7 @@ export default function Login() {
         render={({ field }) => (
           <FormField
             label="Username or Email"
+            tone="dark"
             autoCapitalize="none"
             autoComplete="username"
             value={field.value}
@@ -68,6 +70,7 @@ export default function Login() {
         render={({ field }) => (
           <FormField
             label="Password"
+            tone="dark"
             secureTextEntry
             autoComplete="current-password"
             value={field.value}
@@ -88,10 +91,10 @@ export default function Login() {
           {errors.root.message}
         </Text>
       ) : null}
-      <Button label="Log In" loading={isSubmitting} onPress={submit} />
+      <Button label="Log In" variant="gold" loading={isSubmitting} onPress={submit} />
       <Button
         label="Continue without logging in"
-        variant="outline"
+        variant="ghost"
         onPress={() => router.replace('/(tabs)')}
       />
       <Link href="/auth/forgot-password" style={s.centerLink}>
@@ -105,12 +108,12 @@ export default function Login() {
 }
 
 const s = StyleSheet.create({
-  passwordHelp: { color: colors.textSecondary, fontSize: 12, lineHeight: 17 },
-  inlineLink: { color: colors.primary, fontWeight: '700' },
-  error: { color: colors.error, fontSize: 13 },
-  centerLink: { color: colors.primary, textAlign: 'center', fontWeight: '700' },
+  passwordHelp: { color: '#E6CBD1', fontSize: 12, lineHeight: 17 },
+  inlineLink: { color: colors.secondary, fontWeight: '700' },
+  error: { color: '#FFB4AB', fontSize: 13 },
+  centerLink: { color: '#E6CBD1', textAlign: 'center', fontWeight: '700' },
   createLink: {
-    color: colors.primary,
+    color: '#E6CBD1',
     textAlign: 'center',
     fontSize: 16,
     fontWeight: '700',
