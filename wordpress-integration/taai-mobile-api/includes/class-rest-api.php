@@ -7,6 +7,7 @@ final class TAAI_Mobile_REST_API {
             'login' => ['POST', [TAAI_Mobile_Auth::class, 'login']],
             'register' => ['POST', [TAAI_Mobile_Auth::class, 'register']],
             'forgot-password' => ['POST', [TAAI_Mobile_Auth::class, 'forgot']],
+            'contact' => ['POST', [TAAI_Mobile_Contact::class, 'send']],
             'events' => ['GET', [TAAI_Mobile_Events::class, 'list']],
             'galleries' => ['GET', [TAAI_Mobile_Gallery::class, 'albums']],
         ];

@@ -31,6 +31,7 @@ export default function Profile() {
           membership and member discounts.
         </Text>
         <Button label="Log In" onPress={() => router.push('/auth/login')} />
+        <Button label="Contact TAAI" variant="outline" onPress={() => router.push('/contact')} />
       </Screen>
     );
   const initials =
@@ -61,6 +62,9 @@ export default function Profile() {
         <View style={s.body}>
           <Pressable onPress={() => router.push('/(tabs)/membership')} style={s.memberCard}>
             <Text style={s.memberType}>{membership.data?.membershipType ?? 'TAAI Membership'}</Text>
+            {membership.data?.memberNumber ? (
+              <Text style={s.memberNumber}>Member no. {membership.data.memberNumber}</Text>
+            ) : null}
             <Text style={s.memberStatus}>
               {membership.isLoading
                 ? 'Checking status…'
@@ -114,7 +118,7 @@ export default function Profile() {
               {
                 label: 'Contact TAAI',
                 icon: 'mail-outline',
-                onPress: () => WebBrowser.openBrowserAsync(`${urls.wordpress}/contact-us/`),
+                onPress: () => router.push('/contact'),
               },
               {
                 label: 'Privacy Policy',
@@ -204,6 +208,7 @@ const s = StyleSheet.create({
     padding: spacing.lg,
   },
   memberType: { color: colors.primaryDark, fontWeight: '800', fontSize: 17 },
+  memberNumber: { color: colors.primaryDark, marginTop: 4, fontWeight: '600' },
   memberStatus: { color: colors.success, textTransform: 'capitalize', marginTop: 4 },
   logout: {
     minHeight: 52,

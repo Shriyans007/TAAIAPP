@@ -70,7 +70,14 @@ export default function Membership() {
             </View>
             <View style={s.goldRule} />
             <Text style={s.membershipType}>{q.data.membershipType.toUpperCase()}</Text>
-            <Text style={s.memberName}>{user?.displayName ?? 'TAAI Member'}</Text>
+            <Text style={s.memberName}>
+              {[user?.firstName?.trim(), user?.lastName?.trim()].filter(Boolean).join(' ') ||
+                user?.displayName ||
+                'TAAI Member'}
+            </Text>
+            {q.data.memberNumber ? (
+              <Text style={s.memberNumber}>Member no. {q.data.memberNumber}</Text>
+            ) : null}
             <View
               style={[
                 s.statusBadge,
@@ -88,6 +95,9 @@ export default function Membership() {
           </View>
 
           <View style={s.details}>
+            {q.data.memberNumber ? (
+              <DetailRow icon="id-card-outline" label="Member number" value={q.data.memberNumber} />
+            ) : null}
             {q.data.startDate ? (
               <DetailRow
                 icon="calendar-outline"
@@ -227,6 +237,7 @@ const s = StyleSheet.create({
   },
   membershipType: { color: colors.secondary, fontSize: 25, fontWeight: '900' },
   memberName: { color: colors.white, fontSize: 20, fontWeight: '700', marginTop: spacing.sm },
+  memberNumber: { color: '#E6CBD1', fontSize: 13, marginTop: spacing.xs },
   statusBadge: {
     alignSelf: 'flex-start',
     flexDirection: 'row',

@@ -4,6 +4,7 @@ import { requestJson } from '@/services/http';
 export type Membership = {
   status: string;
   membershipType: string | null;
+  memberNumber?: string;
   startDate?: string;
   nextPayment?: string;
   endDate?: string;

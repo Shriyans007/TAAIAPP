@@ -3,7 +3,7 @@ import type { ExpoConfig } from 'expo/config';
 const config: ExpoConfig = {
   name: 'TAAI APP',
   slug: 'taai-app',
-  icon: './assets/branding/taai-round-logo.png',
+  icon: './assets/branding/taai-burgundy-icon.png',
   scheme: 'taai',
   version: '1.0.0',
   orientation: 'portrait',
@@ -17,13 +17,24 @@ const config: ExpoConfig = {
   android: {
     package: 'au.net.taai.app',
     versionCode: 1,
-    adaptiveIcon: { backgroundColor: '#6B1D2E' },
+    adaptiveIcon: {
+      foregroundImage: './assets/branding/taai-burgundy-icon.png',
+      backgroundColor: '#6B1D2E',
+    },
   },
   plugins: [
     'expo-router',
     'expo-secure-store',
     ['expo-notifications', { color: '#6B1D2E' }],
-    'expo-splash-screen',
+    [
+      'expo-splash-screen',
+      {
+        image: './assets/branding/taai-burgundy-icon.png',
+        imageWidth: 260,
+        resizeMode: 'contain',
+        backgroundColor: '#6B1D2E',
+      },
+    ],
     'expo-web-browser',
     [
       'expo-image-picker',

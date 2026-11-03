@@ -32,6 +32,7 @@ export default function RootLayout() {
           <Stack.Screen name="auth/forgot-password" options={{ title: 'Reset Password' }} />
           <Stack.Screen name="profile/edit" options={{ title: 'Edit Profile' }} />
           <Stack.Screen name="profile/settings" options={{ title: 'Account Settings' }} />
+          <Stack.Screen name="contact" options={{ title: 'Contact TAAI' }} />
         </Stack>
       </AuthProvider>
     </QueryClientProvider>

@@ -14,7 +14,7 @@ const schema = z.object({
 type Values = z.infer<typeof schema>;
 
 export default function Login() {
-  const { returnTo } = useLocalSearchParams<{ returnTo?: string }>();
+  const { returnTo, initial } = useLocalSearchParams<{ returnTo?: string; initial?: string }>();
   const { login } = useAuth();
   const destination =
     returnTo === '/(tabs)/directory' || returnTo === '/(tabs)/membership' ? returnTo : '/(tabs)';
@@ -45,6 +45,7 @@ export default function Login() {
     <AuthScaffold
       title="Welcome back"
       subtitle="Use the same username/email and password as the TAAI website."
+      canGoBack={initial !== '1'}
     >
       <Controller
         control={control}
@@ -88,6 +89,11 @@ export default function Login() {
         </Text>
       ) : null}
       <Button label="Log In" loading={isSubmitting} onPress={submit} />
+      <Button
+        label="Continue without logging in"
+        variant="outline"
+        onPress={() => router.replace('/(tabs)')}
+      />
       <Link href="/auth/forgot-password" style={s.centerLink}>
         Forgot Password?
       </Link>
