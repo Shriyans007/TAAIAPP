@@ -1,7 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useQuery } from '@tanstack/react-query';
 import { router, useLocalSearchParams } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import * as WebBrowser from 'expo-web-browser';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Image,
   Pressable,
@@ -17,6 +19,7 @@ import { getEvent } from '@/services/woocommerce/events';
 import { colors, radius, shadows, spacing } from '@/theme';
 
 export default function EventDetail() {
+  const insets = useSafeAreaInsets();
   const { id } = useLocalSearchParams<{ id: string }>();
   const q = useQuery({
     queryKey: ['event', id],
@@ -40,9 +43,13 @@ export default function EventDetail() {
     ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.venue)}`
     : null;
   return (
-    <SafeAreaView style={s.safe}>
-      <ScrollView contentContainerStyle={s.content}>
-        <View style={s.hero}>
+    <View style={s.safe}>
+      <StatusBar style="light" />
+      <ScrollView
+        contentInsetAdjustmentBehavior="never"
+        contentContainerStyle={[s.content, { paddingBottom: spacing.xxxl + insets.bottom }]}
+      >
+        <View style={[s.hero, { height: 278 + insets.top }]}>
           {event.image ? (
             <Image
               source={{ uri: event.image }}
@@ -57,7 +64,7 @@ export default function EventDetail() {
             accessibilityRole="button"
             accessibilityLabel="Go back"
             onPress={() => router.back()}
-            style={s.back}
+            style={[s.back, { top: insets.top + spacing.lg }]}
           >
             <Ionicons name="chevron-back" size={25} color={colors.white} />
           </Pressable>
@@ -134,7 +141,7 @@ export default function EventDetail() {
           />
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 

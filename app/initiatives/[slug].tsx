@@ -1,13 +1,16 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useQuery } from '@tanstack/react-query';
 import { router, useLocalSearchParams } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import * as WebBrowser from 'expo-web-browser';
 import { Image, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button, ErrorState, LoadingState } from '@/components';
 import { getPageBySlug } from '@/services/wordpress/pages';
 import { colors, radius, shadows, spacing } from '@/theme';
 
 export default function InitiativeDetail() {
+  const insets = useSafeAreaInsets();
   const { slug } = useLocalSearchParams<{ slug: string }>();
   const page = useQuery({
     queryKey: ['wordpress-page', slug],
@@ -36,9 +39,13 @@ export default function InitiativeDetail() {
     );
   const initiative = page.data;
   return (
-    <SafeAreaView style={s.safe}>
-      <ScrollView contentContainerStyle={s.content}>
-        <View style={s.hero}>
+    <View style={s.safe}>
+      <StatusBar style="light" />
+      <ScrollView
+        contentInsetAdjustmentBehavior="never"
+        contentContainerStyle={[s.content, { paddingBottom: spacing.xxxl + insets.bottom }]}
+      >
+        <View style={[s.hero, { height: 222 + insets.top }]}>
           {initiative.image ? (
             <Image
               source={{ uri: initiative.image }}
@@ -55,7 +62,7 @@ export default function InitiativeDetail() {
             accessibilityRole="button"
             accessibilityLabel="Go back"
             onPress={() => router.back()}
-            style={s.back}
+            style={[s.back, { top: insets.top + spacing.lg }]}
           >
             <Ionicons name="chevron-back" size={25} color={colors.white} />
           </Pressable>
@@ -92,7 +99,7 @@ export default function InitiativeDetail() {
           />
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
