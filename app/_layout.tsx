@@ -34,6 +34,8 @@ export default function RootLayout() {
             }}
           />
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="gallery" options={{ title: 'Gallery' }} />
+          <Stack.Screen name="initiatives" options={{ title: 'TAAI Initiatives' }} />
           <Stack.Screen name="events/[id]" options={{ headerShown: false }} />
           <Stack.Screen name="initiatives/[slug]" options={{ headerShown: false }} />
           <Stack.Screen

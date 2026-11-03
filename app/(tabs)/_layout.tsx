@@ -85,13 +85,11 @@ export default function TabLayout() {
           tabBarLabelStyle: { fontWeight: '700', marginTop: 4 },
         }}
       />
-      <Tabs.Screen name="initiatives" options={{ href: null }} />
       <Tabs.Screen
         name="directory"
         options={{ title: 'Directory', tabBarIcon: icon('storefront-outline') }}
       />
       <Tabs.Screen name="profile" options={{ title: 'Profile', tabBarIcon: icon('person') }} />
-      <Tabs.Screen name="gallery" options={{ href: null }} />
     </Tabs>
   );
 }

@@ -93,7 +93,7 @@ export default function Profile() {
               {
                 label: 'Gallery',
                 icon: 'images-outline',
-                onPress: () => router.push('/(tabs)/gallery'),
+                onPress: () => router.push('/gallery'),
               },
             ]}
           />

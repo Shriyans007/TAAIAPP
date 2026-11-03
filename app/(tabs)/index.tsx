@@ -17,8 +17,8 @@ import { getEvents } from '@/services/woocommerce/events';
 import { colors, radius, shadows, spacing } from '@/theme';
 
 const quickLinks = [
-  ['Gallery', 'images-outline', '/(tabs)/gallery'],
-  ['Initiatives', 'star-outline', '/(tabs)/initiatives'],
+  ['Gallery', 'images-outline', '/gallery'],
+  ['Initiatives', 'star-outline', '/initiatives'],
   ['Directory', 'storefront-outline', '/(tabs)/directory'],
   ['Profile', 'person-outline', '/(tabs)/profile'],
 ] as const;
@@ -189,17 +189,19 @@ export default function Home() {
           <SectionHeading
             title="TAAI INITIATIVES"
             action="See All"
-            onPress={() => router.push('/(tabs)/initiatives')}
+            onPress={() => router.push('/initiatives')}
           />
           <View style={s.initiatives}>
             {[
-              ['Aksharajyothi', 'book'],
-              ['TAAI Youth', 'sunny'],
-              ['Telugu Business', 'briefcase'],
-            ].map(([label, icon]) => (
+              ['Aksharajyothi', 'book', 'aksharajyothi'],
+              ['TAAI Youth', 'sunny', 'taai-youth'],
+              ['Telugu Business', 'briefcase', 'telugu-business-network'],
+            ].map(([label, icon, slug]) => (
               <Pressable
                 key={label}
-                onPress={() => router.push('/(tabs)/initiatives')}
+                accessibilityRole="button"
+                accessibilityLabel={`View ${label}`}
+                onPress={() => router.push(`/initiatives/${slug}`)}
                 style={s.initiative}
               >
                 <View style={s.initiativeIcon}>
